@@ -34,7 +34,7 @@ google_analytics: G-5SDSHCBF5V
 
 author: mando
 
-minima.date_format:  "%b %-d, %Y"
+show_excerpts: true
 
 # Build settings
 theme: minima

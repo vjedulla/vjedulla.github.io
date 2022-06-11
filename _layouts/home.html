@@ -10,11 +10,13 @@ list_title: latest
 
   {{ content }}
 
+  {% assign posts=site.posts | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
     <ul class="post-list">
       {%- for post in site.posts -%}
-      <li>
+      <li class="{{ post.lang }}">
         <!-- <span>
           <svg class="svg-icon"><use xlink:href="{{ '/assets/icons.svg#presantation' | relative_url }}"></use></svg>
         </span> -->
@@ -24,10 +26,13 @@ list_title: latest
           <a class="post-link" href="{{ post.url | relative_url }}">
             {{ post.title | escape }}
           </a>
+          <span class="post-excerpt">
+            {{ post.excerpt | strip_html | truncatewords: 20 }}
+          </span>
         </h3>
-        {%- if site.show_excerpts -%}
+        <!-- {%- if site.show_excerpts -%}
           {{ post.excerpt }}
-        {%- endif -%}
+        {%- endif -%} -->
       </li>
       {%- endfor -%}
     </ul>

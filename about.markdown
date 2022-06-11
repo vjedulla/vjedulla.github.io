@@ -6,4 +6,4 @@ permalink: /about/
 
 Mando's blog. 
 
-Not much here as an about :(
+Data Scientist at Jetpack.AI
