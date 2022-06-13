@@ -9,10 +9,11 @@ In this post we will look at the basic idea behind simulating the world around u
 mostly in logistics planning. 
 
 #### Problem statement
-> Officials of a city are in need to understand better their emergency responses services and if they are below a given threshold (in minutes). 
+> Officials of a city are in need to understand better their emergency responses services and if they are below a given threshold. 
 > How is the distribution of response times in the city? Is there a bottleneck we can resolve?
 
-The statement is a bit vague and no data is provided. How do we go about trying to understand this problem, let alone solve it?  
+The statement is a bit vague and no data is provided. How do we go about trying to understand this problem, let alone solve it? We simulate
+the data!
 
 #### Simulation
 _[Simulation](https://en.wikipedia.org/wiki/Simulation){:target="_blank"} is the imitation of real-worlds processes over time._ It is
@@ -74,11 +75,10 @@ def gen_correlated_points(x_prime, y_prime, n=2):
 {% endhighlight %}
 
 
-There are 3 functions here that will help us achieve our goal. 
+There are 2 functions here that will help us achieve our goal. 
 
 1. `random_cords` -> takes in $$n$$ and a bounding region (for a city, but its not necessary it just looks good on a map)
 2. `gen_correlated_points` -> takes in a point $$(x_{prime}, y_{prime})$$ and generates a correlated blob of points with a random covariance matrix.
-3. `gen_points` -> same as above, but with a given covariance matrix.
 
 
 Tha base idea here is that we need a way to generate random points on a grid, then a way to generate a set of correlated points. 
@@ -110,14 +110,14 @@ for n in range(1, 20, 2):
     gmm_models.append((gmm_fitted, labels, gmm_fitted.bic(data)))
 {% endhighlight %}
 
-_Note: We generate a lot of these mixture models to try and understand how many "clusters" of points are there, and use BIC score to take the best one._
+_Note: We generate a lot of these mixture models to try and understand how many "clusters" of points are there, and use BIC score to select the best one fitting our previously generated data._
 
-Another interesting thing about GMM is that they are just mixed gaussian distributions that we can generate as many points as we want, we are not bound by the 
-parameters to generate a sample of data. 
+Another interesting thing about GMM is that they are just a bunch of gaussian distributions. We can sample as many points as we want, and we are not bound by any 
+parameter to generate a new sample. 
 
 ![Generated GMM](/assets/acc_sim/generated_gmm.png)
 
-This works well for small number of points (which is our goal), however we can see the gaussians clusters when we increase the number of sampling points.
+This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal".
 
 ##### Step 3: Analysis
 Now we have come to the interesting part of this post. First we need a couple of emergency care centers like hospitals, but this analysis is 
