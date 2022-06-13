@@ -1,22 +1,22 @@
 ---
 layout: post
-title:  Simulation!
+title:  Simulate!
 date:   2022-06-12
 categories: statistics sim
 ---
 
-In this post we will look at the basic idea behind simulating the world around us. For this purpose I have build a toy problem 
-we need to try to comprehend and solve. 
+In this post we will look at the basic idea behind simulating the world around us. For this purpose we will use a toy problem that happens
+mostly in logistics planning. 
 
 #### Problem statement
-> A city officials are in need to understand better their emergency responses services and if they are below a given threshold (in minutes). 
-> The proportion of emergency vehicles is below this threshold? What can we do to make it better? 
+> Officials of a city are in need to understand better their emergency responses services and if they are below a given threshold (in minutes). 
+> How is the distribution of response times in the city? Is there a bottleneck we can resolve?
 
 The statement is a bit vague and no data is provided. How do we go about trying to understand this problem, let alone solve it?  
 
 #### Simulation
 _[Simulation](https://en.wikipedia.org/wiki/Simulation){:target="_blank"} is the imitation of real-worlds processes over time._ It is
-fairly easy to define, and fun to work with. There is one rule in ssimulation, **always state your assumptions**. If you are not doing that
+fairly easy to define, and fun to work with. There is one rule in simulation, **always state your assumptions**. If you are not doing that
 someone else is doing it for you. Other than that, the accuracy of your simulator to imitate real-life, depends on how these assumptions 
 hold in the real-world. 
 
@@ -36,16 +36,15 @@ _Tangent: if you want to learn why it would have worked, i suggest you read on t
 We need to generate data. But what data specifically? First of we need a way to generate $$n$$ points on a 2D grid. 
 
 {% highlight python %}
-def random_coords(n=5, bounds=(51.13, 51.24, 4.36, 4.49)):
+def random_coords(n=5, bounds=(50.770, 50.859, 4.248, 4.496)):
     """
-        Generates random uniform points on a plane
-
-        # Antwerpen bounds
-        # 51.134913, 4.422604 - south
-        # 51.246860, 4.410615 - north
-        # 51.213798, 4.490582 - east
-        # 51.208221, 4.361827 - west 
+        Generates random uniform points on a plane 
     """
+    # Brussels bounds
+    # 50.770883, 4.361551 - south
+    # 50.928138, 4.363065 - north
+    # 50.863287, 4.248941 - east
+    # 50.859386, 4.496820 - west
     x = np.random.uniform(bounds[0], bounds[1], n)
     y = np.random.uniform(bounds[2], bounds[3], n)
 
@@ -169,6 +168,11 @@ a bit easier.
 ![Resulting time to serve](/assets/acc_sim/resulting_tts.png)
 
 The resulting diagram is the response time given 200 iteration with the logic we described. We can see that most of the density of this KDE
-is clustered near 2.5 minute to 10 minute response. However, we see a spike at 20 minute response time, this is the effect of $$\epsilon$$ 
-that we drew whenever all hospitals have their vehicles associated with other events. This is the worst case part. 
+is clustered near 7 minute to 17 minute response. However, we see a spike at 23 minute response time, this is the effect of $$\epsilon$$ 
+that we drew whenever all hospitals had their vehicles associated with other events. This is the worst case part. One way to control this 
+from not happening is have more emergency vehicles at your disposal. However, by how much and when is a post for another day and another time.
 
+#### Conclusions 
+In this post we have seen how to generate data given a toy problem. The data we generated does not mimic the real world by no means, however, this is good enough 
+for us to dive into some kind of analysis. As we saw in our case, the goal was to get an average time to serve each event, given our assumptions. 
+In the real-world you would __not__ need to create data, as the the data is already given. 
