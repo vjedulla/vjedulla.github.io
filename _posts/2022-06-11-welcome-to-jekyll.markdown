@@ -7,12 +7,12 @@ categories: intro
 description: testing
 ---
 
-Hello all!
+Hello world!
 
 I am Mando and I'm a junior Data Scientist in a company based in Brussels, Belgium. This blog was made for the purposes of trying to become better at
 putting my thoughts into writing. The goal will be towards Data Science topics, talks, snippets and many more things I am interested in.
 That is to say `statistics`, `optimization algorithms` and `graphs`. These are the building blocks to a lot of the algorithms we have at our disposal
-in scikit learn and on other packages. 
+in scikit-learn and on other packages. 
 
 
 In the future I intend to also write about deep learning and neural networks in general, but that day is far from now as I: 1) not good at all with those 
