@@ -175,4 +175,7 @@ from not happening is have more emergency vehicles at your disposal. However, by
 #### Conclusions 
 In this post we have seen how to generate data given a toy problem. The data we generated does not mimic the real world by no means, however, this is good enough 
 for us to dive into some kind of analysis. As we saw in our case, the goal was to get an average time to serve each event, given our assumptions. 
-In the real-world you would __not__ need to create data, as the the data is already given. 
+In the real-world you would not need to generate data for this problem, as the data will be given. However, having the knowledge to create a sample
+dataset for yourself, can make your workflow faster and understand the variables involved better.
+
+_Try to have fun with a toy problem from time to time!_
