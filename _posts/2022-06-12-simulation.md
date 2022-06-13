@@ -167,8 +167,8 @@ a bit easier.
 
 ![Resulting time to serve](/assets/acc_sim/resulting_tts.png)
 
-The resulting diagram is the response time given 200 iteration with the logic we described. We can see that most of the density of this KDE
-is clustered near 7 minute to 17 minute response. However, we see a spike at 23 minute response time, this is the effect of $$\epsilon$$ 
+The resulting diagram is the response time given 50 iteration with the logic we described. We can see that most of the density of this KDE
+is clustered near 2.5 minutes to 10 minute response. However, we see a spike at 20 minute response time, this is the effect of $$\epsilon$$ 
 that we drew whenever all hospitals had their vehicles associated with other events. This is the worst case part. One way to control this 
 from not happening is have more emergency vehicles at your disposal. However, by how much and when is a post for another day and another time.
 
