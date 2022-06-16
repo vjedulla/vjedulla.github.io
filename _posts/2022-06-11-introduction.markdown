@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  Introduction!
+title: Introduction!
 date:   2022-06-11
-categories: intro 
 
 permalink: /hello/
+tags: [statistics, simulation]
 ---
 
 Hello world!

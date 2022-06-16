@@ -1,8 +1,11 @@
 ---
 layout: page
-title: About
+title: Me
+subtitle: Say hi via the social links.
 permalink: /me/
 ---
+
+My name is Armando Alliu but everyone calls me Mando.
 
 Data Scientist @ [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. 
 

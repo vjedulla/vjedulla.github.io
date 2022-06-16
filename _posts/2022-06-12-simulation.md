@@ -1,8 +1,12 @@
 ---
 layout: post
-title:  Simulate!
+title: Simulate!
+subtitle: Mimic the world around you.
 date:   2022-06-12
-categories: statistics sim
+# cover-img: /assets/posts/acc_sim/map_generate.png
+# thumbnail-img: /assets/img/thumb.png
+share-img: /assets/posts/acc_sim/map_generate.png
+tags: [statistics, simulation]
 ---
 
 In this post we will look at the basic idea behind simulating the world around us. For this purpose we will use a toy problem that happens
@@ -36,7 +40,7 @@ _Tangent: if you want to learn why it would have worked, i suggest you read on t
 ##### Step 1: Generate a sample dataset
 We need to generate data. But what data specifically? First of we need a way to generate $$n$$ points on a 2D grid. 
 
-{% highlight python %}
+{% highlight python linenos %}
 def random_coords(n=5, bounds=(50.770, 50.859, 4.248, 4.496)):
     """
         Generates random uniform points on a plane 
@@ -98,7 +102,7 @@ parametrize correctly. We will go about and replicate the gist of our dataset us
 `scikit-learn` has an implementation of GMM and it is simple to use. 
 
 
-{% highlight python %}
+{% highlight python linenos %}
 from sklearn.mixture import GaussianMixture as GMM
 
 gmm_models = []
@@ -115,7 +119,7 @@ _Note: We generate a lot of these mixture models to try and understand how many 
 Another interesting thing about GMM is that they are just a bunch of gaussian distributions. We can sample as many points as we want, and we are not bound by any 
 parameter to generate a new sample. 
 
-![Generated GMM](/assets/posts/acc_sim/generated_gmm.png)
+![Generated GMM](/assets/acc_sim/generated_gmm.png)
 
 This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal".
 
@@ -135,7 +139,7 @@ $$x$$ vehicles at their disposal. Given an accident event $$e$$ we will assign t
 2. Has the availability at that point in time (otherwise add a $$\epsilon \sim N(20, 5)$$ to the delay)
 
 
-{% highlight python %}
+{% highlight python linenos %}
 def logic(xy_acc, amb_val, availability):
     distances, indices = nbrs.kneighbors(xy_acc)
     distances *= 50 # since cords are gps points, just a trick to get "human" distances
