@@ -84,11 +84,11 @@ There are 2 functions here that will help us achieve our goal.
 Tha base idea here is that we need a way to generate random points on a grid, then a way to generate a set of correlated points. 
 What this mimics is the ability of bad neighborhoods or roads where a lot of emergency services are needed.
 
-![Generated Map](/assets/acc_sim/map_generate.png)
+![Generated Map](/assets/posts/acc_sim/map_generate.png)
 
 Or looking it through a bit more abstractly, a heatmap and a scatter-plot tells us the proximity of these points.
 
-![Generated diagram](/assets/acc_sim/map_points.png)
+![Generated diagram](/assets/posts/acc_sim/map_points.png)
 
 ##### Step 2: Repeat multiple times?
 We cannot create one dataset, analyze it and hope that the public will trust our analysis. We need to generate a lot of these
@@ -115,7 +115,7 @@ _Note: We generate a lot of these mixture models to try and understand how many 
 Another interesting thing about GMM is that they are just a bunch of gaussian distributions. We can sample as many points as we want, and we are not bound by any 
 parameter to generate a new sample. 
 
-![Generated GMM](/assets/acc_sim/generated_gmm.png)
+![Generated GMM](/assets/posts/acc_sim/generated_gmm.png)
 
 This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal".
 
@@ -165,7 +165,7 @@ def logic(xy_acc, amb_val, availability):
 The code above has a lot of assumptions that do not reflect the real-world, but sometimes we just need some spherical cows to make our job
 a bit easier. 
 
-![Resulting time to serve](/assets/acc_sim/resulting_tts.png)
+![Resulting time to serve](/assets/posts/acc_sim/resulting_tts.png)
 
 The resulting diagram is the response time given 50 iteration with the logic we described. We can see that most of the density of this KDE
 is clustered near 2.5 minutes to 10 minute response. However, we see a spike at 20 minute response time, this is the effect of $$\epsilon$$ 
