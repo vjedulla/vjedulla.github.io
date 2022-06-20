@@ -119,7 +119,7 @@ footer-hover-col: "#0085A1"
 
 # navbar-img: "/assets/img/bgimage.png"
 #footer-img: "/assets/img/bgimage.png"
-#page-img: "/assets/img/bgimage.png"
+# page-img: "/assets/img/bg.jpeg"
 
 # Suggest a colour for mobile browsers to use as the browser's theme. This is only supported by a few mobile browsers.
 #mobile-theme-col: "#0085A1"
@@ -129,8 +129,9 @@ footer-hover-col: "#0085A1"
 #  - "/assets/css/custom-styles.css"
 
 # If you have common JavaScript files that should be included in every page, list them here
-#site-js:
-#  - "/assets/js/custom-script.js"
+site-js:
+ - "/assets/js/rhill-voronoi-core.min.js"
+ - "/assets/js/main.voronoi.js"
 
 # --- Web Analytics Section --- #
 
