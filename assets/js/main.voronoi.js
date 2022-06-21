@@ -4,14 +4,6 @@ let width = box.clientWidth;
 let height = box.clientHeight;
 
 
-// function eucDistance(a, b, c, d){
-//     var x = a-c;
-//     var y = b-d;
-//     return Math.sqrt(x*x + y*y);
-// }
-
-
-
 function sketch(p) {
     p.init_voronoi = function(){
         var voronoi = new Voronoi();
@@ -23,7 +15,7 @@ function sketch(p) {
         }
 
 
-        var n = randomNumber(6, 100);
+        var n = randomNumber(14, 30);
         var points = [];
         for (let j = 0; j < n; j++) {
             const w = randomNumber(0, width);
@@ -70,14 +62,28 @@ function sketch(p) {
 
         p.draw_voronoi(vector);
     }
+
+    var rect = [0, 0, 0]
   
     p.draw = function () {
+        // console.log(p.deltaTime)
+        // if(p.deltaTime > 15){
+        //     vector = p.init_voronoi();
+        //     p.draw_voronoi(vector);
+        // }
+
+        // vector[0][0].x = (vector[0][0].x + 1) % width
+
+        // console.log(vector[0][0].x)
         // var size = 30;
+
+
+        // rect = [p.mouseX - size, p.mouseY - size, size*2]
 
         // p.color(20);
         // p.fill(20);
-        // p.rect(p.mouseX - size, p.mouseY - size, size*2);
-        // // p.clear();
+        // p.rect(rect[0], rect[1], rect[2])
+        // p.clear();
     }
   }
 
