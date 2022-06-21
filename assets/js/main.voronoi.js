@@ -10,7 +10,7 @@ function sketch(p) {
 
 
         function randomNumber(a, b){
-            return  parseInt(a + Math.floor(Math.random() * (b+1)));   
+            return  parseInt(a + Math.round(Math.random() * (b+1)));   
         }
 
         var method = randomNumber(0, 1); // which method will be executed (sampling)
