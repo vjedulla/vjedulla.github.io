@@ -19,9 +19,6 @@ function sketch(p) {
         const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
         const zoomFactor = randomNumber(3, 6);
 
-
-        console.log(method)
-
         var points = [];
         for (let j = 0; j < n; j++) {
             const w = randomNumber(0, width);
