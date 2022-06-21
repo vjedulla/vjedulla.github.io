@@ -15,6 +15,7 @@ author: Armando Alliu
 
 navbar-links:
   About Me: "me"
+  # hobbies: "exp"
   # Resources:
   #   - Beautiful Jekyll: "https://beautifuljekyll.com"
   #   - Learn markdown: "https://www.markdowntutorial.com/"
