@@ -84,6 +84,7 @@ function sketch(p) {
         p.createCanvas(width, 400);
 
         p.draw_voronoi(vector);
+        p.noLoop(); // no need to loop empty draw
     }
   
     p.draw = function () {
