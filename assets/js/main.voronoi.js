@@ -13,11 +13,14 @@ function sketch(p) {
             return  parseInt(a + Math.round(Math.random() * (b+1)));   
         }
 
-        var method = randomNumber(0, 1); // which method will be executed (sampling)
+        var method = randomNumber(0, 0); // which method will be executed (sampling)
         const n = randomNumber(20, 50); // how many points
         const offsetX = width / 2; //randomNumber(-width*0.25, width * 0.25);
         const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
         const zoomFactor = randomNumber(3, 6);
+
+
+        console.log(method)
 
         var points = [];
         for (let j = 0; j < n; j++) {
