@@ -13,7 +13,7 @@ Based in Brussels, Belgium. Passion for science, films and photography. If you l
 hit me up via my social links on the footer of this page.
 
 
-    The blog is dedicated to my journey as a Data Scientist. My personal goal here is to fill the gap 
-    from my theoretical knowledge, to practical and useful application. Currently, I hold a masters degree in Data Science, and the 
-    AWS Solution Architect certification. Past work experiences were focused towards Data Science/Engineering where notably I 
-    have worked with clients as Unilever and RESA. 
+The blog is dedicated to my journey as a Data Scientist. My personal goal here is to fill the gap 
+from my theoretical knowledge, to practical and useful application. Currently, I hold a masters degree in Data Science, and the 
+AWS Solution Architect certification. Past work experiences were focused towards Data Science/Engineering where notably I 
+have worked with clients as Unilever and RESA. 
