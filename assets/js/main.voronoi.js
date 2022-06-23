@@ -70,7 +70,7 @@ function sketch(p) {
             col_lines = p.color(67, 240, 166);
         }
 
-        if(method == 1 || method == 2){
+        if(method == 1){
             p.fill(col_points);
             p.noStroke();
             for (let index = 0; index < points.length; index++) {
