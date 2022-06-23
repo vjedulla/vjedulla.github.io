@@ -67,7 +67,7 @@ function sketch(p) {
             col_lines = p.color(217, 63, 81);
         }else if(method == 2){
             col_points = p.color(0, 109, 161);
-            col_lines = p.color(67, 240, 166);
+            col_lines = p.color(0, 109, 161);
         }
 
         if(method == 1){
