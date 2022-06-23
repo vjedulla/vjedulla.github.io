@@ -13,13 +13,21 @@ function sketch(p) {
             return  parseInt(a + Math.round(Math.random() * (b+1)));   
         }
 
-        var method = randomNumber(0, 0); // which method will be executed (sampling)
+        var method = randomNumber(0, 1); // which method will be executed (sampling)
         const n = randomNumber(20, 50); // how many points
+
         const offsetX = width / 2; //randomNumber(-width*0.25, width * 0.25);
         const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
         const zoomFactor = randomNumber(3, 6);
 
         var points = [];
+
+        var A = (width * height) / n;
+        var b = Math.ceil(Math.sqrt((A * height) / width));
+        var a = Math.ceil((width * b) / height);
+
+        var startX = 12, startY = 23, stepX = a, stepY = b, div = Math.ceil(width / a);
+
         for (let j = 0; j < n; j++) {
             const w = randomNumber(0, width);
             const h = randomNumber(0, height);
@@ -28,12 +36,17 @@ function sketch(p) {
                 points.push({x: (w * Math.cos(w)) / zoomFactor  + offsetX, y: (h * Math.sin(h)) / zoomFactor + offsetY});
             }else if(method == 1){
                 points.push({x: w, y: h});
+            }else if(method == 2){
+                newX = (startX + stepX * j) % width, newY = (startY + stepY * parseInt(j / div)) % height;
+                
+                points.push({x: newX, y: newY});
             }
             
         }
 
-        var diagram = voronoi.compute(points, bbox);
+        console.log(points);
 
+        var diagram = voronoi.compute(points, bbox);
         return [points, diagram, method];
     }
 
@@ -52,15 +65,18 @@ function sketch(p) {
         }else if(method == 0){
             col_points = p.color(0, 109, 161);
             col_lines = p.color(217, 63, 81);
+        }else if(method == 2){
+            col_points = p.color(0, 109, 161);
+            col_lines = p.color(67, 240, 166);
         }
 
-        if(method == 1){
+        if(method == 1 || method == 2){
             p.fill(col_points);
             p.noStroke();
             for (let index = 0; index < points.length; index++) {
                 const element = points[index];
                 
-                p.circle(element.x, element.y, 3);
+                p.circle(element.x, element.y, 2);
             }
         }
         
