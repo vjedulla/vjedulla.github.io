@@ -141,7 +141,7 @@ site-js:
 gtag: "G-5SDSHCBF5V"
 
 # Fill in your Google Analytics ID to track your website using Google Analytics
-#google_analytics: ""
+# google_analytics: ""
 
 # Fill in your Cloudflare Analytics beacon token to track your website using Cloudflare Analytics
 #cloudflare_analytics: ""
