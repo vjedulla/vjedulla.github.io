@@ -20,6 +20,12 @@ function sketch(p) {
     }
 
 
+    p.sampling_method = function(input_method){
+        // make the code more readable
+    }
+
+
+
     p.init_voronoi = function(){
         var voronoi = new Voronoi();
         var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
