@@ -4,6 +4,22 @@ let width = box.clientWidth;
 let height = box.clientHeight;
 
 function sketch(p) {
+    p.triangle = function(){
+        var side = 200;
+        var cx = width/2, cy = height/2;
+
+        var h = side * (Math.sqrt(3)/2);
+
+        // console.log(cx, cy, h);
+
+        p.translate(cx, cy);
+        p.stroke(100);
+        p.line( -side / 2, h / 2, side / 2, h / 2);
+        p.line(side / 2, h / 2, 0, -h / 2);
+        p.line(0, -h / 2, -side / 2, h / 2);
+    }
+
+
     p.init_voronoi = function(){
         var voronoi = new Voronoi();
         var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
@@ -96,10 +112,13 @@ function sketch(p) {
 
 
     p.setup = function () {
-        vector = p.init_voronoi();
+        // vector = p.init_voronoi();
         p.createCanvas(width, 250);
 
-        p.draw_voronoi(vector);
+        // p.draw_voronoi(vector);
+
+        p.triangle();
+
         p.noLoop(); // no need to loop empty draw
     }
   
