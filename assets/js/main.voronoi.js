@@ -5,8 +5,8 @@ let height = box.clientHeight;
 
 
 class helper{
-    randomNumber(){
-        return 4;
+    static randomNumber(a, b){
+        return parseInt(a + Math.round(Math.random() * (b+1)));   
     }
 
     combine(a, b){
@@ -28,7 +28,11 @@ class helper{
     }
 
     generate_points() {
-        throw new Error("Method 'say()' must be implemented.");
+        throw new Error("Method 'generate_points()' must be implemented.");
+    }
+
+    draw(points, settings){
+        throw new Error("Method 'draw()' must be implemented.");
     }
 }
 
@@ -38,11 +42,60 @@ class helper{
  * @class Voronoi
  * @extends {Doodle}
  */
- class VoronoiD extends Doodle {
+ class RandomVoronoi extends Doodle {
+    constructor(p5inst, number) {
+        super();
+        this.p = p5inst;
+        this.number = (number == null) ? helper.randomNumber(50, 100) : helper.randomNumber(number * 0.5, number * 1.5);
+    }
+
     generate_points() {
-        console.log("voronoi");
+        var voronoi = new Voronoi();
+        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+
+        const n = this.number;
+        var points = [];
+
+        for (let j = 0; j < n; j++) {
+            const w = helper.randomNumber(0, width);
+            const h = helper.randomNumber(0, height);
+            points.push({x: w, y: h});
+        }
+
+        var diagram = voronoi.compute(points, bbox);
+
+        this.points = points;
+        this.diagram = diagram;
+
+        return this;
+    }
+
+    draw(points, settings){
+        const col_points = this.p.color(217, 63, 81);
+        const col_lines = this.p.color(0, 109, 161);
+
+        this.p.stroke(col_lines);
+
+        for (let i = 0; i < this.diagram.edges.length; i++) {
+            const e = this.diagram.edges[i];
+        
+            if (e.rSite != null && e.lSite != null){
+                this.p.line(e.va.x, e.va.y, e.vb.x, e.vb.y);
+            }
+        }
+
+        // 1/4 of the time draw the points as well
+        if(helper.randomNumber(0, 3) <= 3) return;
+
+        this.p.fill(col_points);
+        this.p.noStroke();
+        for (let index = 0; index < this.points.length; index++) {
+            const element = this.points[index];
+            this.p.circle(element.x, element.y, 3);
+        }
     }
 }
+
 
 /**
  * Triangle doodle.
@@ -51,27 +104,53 @@ class helper{
  * @extends {Doodle}
  */
  class Triangle extends Doodle {
-    generate_points() {
-        console.log("triangle");
+    constructor(p5inst, side_length, number) {
+        super();
+        this.side = side_length;
+        this.p = p5inst;
+        this.number = (number == null) ? 2000 : number;
     }
-}
 
-function sketch(p) {
-    p.triangle = function(){
-        function randomNumber(a, b){
-            return  parseInt(a + Math.round(Math.random() * (b+1)));   
+    random_idx(points){
+        var idx_a = -1;
+        var idx_b = -1;
+
+        while(true){
+            idx_a = helper.randomNumber(0, points.length - 2);
+            idx_b = helper.randomNumber(0, points.length - 2);
+
+            if(idx_a != idx_b) break;
         }
+        return [idx_a, idx_b];
+    }
 
-        var side = 250;
-        var cx = width/2, cy = height/2;
 
+    choose_random(points, m_s, c_s){
+        var rnd_idx = this.random_idx(points);
+        const idx_a = rnd_idx[0];
+        const idx_b = rnd_idx[1];
+
+        var rnd_x = helper.randomNumber(
+                    Math.min(points[idx_a][0], points[idx_b][0]),
+                    Math.max(points[idx_a][0], points[idx_b][0])
+        );
+
+        var det_y = m_s[idx_b] * rnd_x + c_s[idx_b];
+        
+        // console.log(points, idx_a, idx_b, rnd_x, det_y);
+        // console.log(Math.min(points[idx_a][0], points[idx_b][0]), Math.max(points[idx_a][0], points[idx_b][0]));
+        // console.log(m_s, c_s);
+
+        return [rnd_x, det_y];
+    }
+
+    generate_points() {
+        var side = this.side;
         var h = side * (Math.sqrt(3)/2);
 
         var a = [-side / 2, h / 2];
         var b = [side / 2, h / 2];
         var c = [0, -h / 2];
-
-        console.log(a, b, c);
 
         var m_ab = (a[1] - b[1]) / (a[0] - b[0]);
         var c_ab = b[1] - m_ab * b[0];
@@ -84,96 +163,57 @@ function sketch(p) {
         var c_ca = a[1] - m_ca * a[0];
 
 
-        var random_idx = function(points){
-            var idx_a = -1;
-            var idx_b = -1;
+        var rnd_point = this.choose_random([a, b, c], [m_ab, m_bc, m_ca], [c_ab, c_bc, c_ca]);
 
-            while(true){
-                idx_a = randomNumber(0, points.length - 2);
-                idx_b = randomNumber(0, points.length - 2);
-
-                if(idx_a != idx_b) break;
-            }
-            return [idx_a, idx_b];
-        }
-
-        var choose_random = function(points, m_s, c_s){
-            var rnd_idx = random_idx(points);
-            idx_a = rnd_idx[0];
-            idx_b = rnd_idx[1];
-
-            var rnd_x = randomNumber(
-                        Math.min(points[idx_a][0], points[idx_b][0]),
-                        Math.max(points[idx_a][0], points[idx_b][0])
-            );
-
-            var det_y = m_s[idx_b] * rnd_x + c_s[idx_b];
-            
-            // console.log(points, idx_a, idx_b, rnd_x, det_y);
-            // console.log(Math.min(points[idx_a][0], points[idx_b][0]), Math.max(points[idx_a][0], points[idx_b][0]));
-            // console.log(m_s, c_s);
-
-            return [rnd_x, det_y];
-        }
-
-        var rnd_point = choose_random([a, b, c], [m_ab, m_bc, m_ca], [c_ab, c_bc, c_ca]);
-
-
-        var size_bg = 5;
-        var size_sm = 1;
-        var n = 2000;
-
-        p.noStroke();
-        p.fill(100);
-        p.circle(rnd_point[0] + cx, rnd_point[1] + cy, size_sm);
+        var n = this.number;
 
         var points = [a, b, c];
 
-        var all_points = [
-            [a[0] + cx, a[1] + cy],
-            [b[0] + cx, b[1] + cy],
-            [c[0] + cx, c[1] + cy],
-        ]
+        var all_points = []
 
         for (let i = 0; i < n; i++) {
-            var which = random_idx(points)[0];
-
-            // var m_wr = (points[which][1] - rnd_point[1]) / (points[which][0] - rnd_point[0]);
-            // var c_wr = rnd_point[1] - m_wr * rnd_point[0];
+            var which = this.random_idx(points)[0];
 
             var midpoint_x = (points[which][0] + rnd_point[0]) / 2;
             var midpoint_y = (points[which][1] + rnd_point[1]) / 2;
             
             rnd_point = [midpoint_x, midpoint_y];
-            p.noStroke();
-            p.fill(100);
-            p.circle(rnd_point[0] + cx, rnd_point[1] + cy, size_sm);
-
-            all_points.push([rnd_point[0] + cx, rnd_point[1] + cy])
+            all_points.push({x: rnd_point[0], y: rnd_point[1]})
         }
 
-        p.noStroke();
-        p.fill(100);
-        p.circle(a[0] + cx, a[1] + cy, size_bg);
-        p.circle(b[0] + cx, b[1] + cy, size_bg);
-        p.circle(c[0] + cx, c[1] + cy, size_bg);
-
-
-        // p.translate(cx, cy);
-        // p.stroke(100);
-        // p.line( -side / 2, h / 2, side / 2, h / 2);
-        // p.line(side / 2, h / 2, 0, -h / 2);
-        // p.line(0, -h / 2, -side / 2, h / 2);
-
-        return all_points;
+        this.side_points = [
+            {x: a[0], y: a[1]},
+            {x: b[0], y: b[1]},
+            {x: c[0], y: c[1]},
+        ]
+        
+        this.points = all_points;
+        return this;
     }
 
+    draw(){
+        const sps = this.side_points;
+        const size_bg = 5;
+        const size_sm = 1;
+        const cx = width/2, cy = height/2;
 
-    p.sampling_method = function(input_method){
-        // make the code more readable
+        this.p.noStroke();
+        this.p.fill(100);
+        this.p.circle(sps[0].x + cx, sps[0].y + cy, size_bg);
+        this.p.circle(sps[1].x + cx, sps[1].y + cy, size_bg);
+        this.p.circle(sps[2].x + cx, sps[2].y + cy, size_bg);
+
+        const n = this.number;
+
+        for (let i = 0; i < n; i++) {
+            this.p.noStroke();
+            this.p.fill(100);
+            this.p.circle(this.points[i].x + cx, this.points[i].y + cy, size_sm);
+        }
     }
+}
 
-
+function sketch(p) {
 
     p.init_voronoi = function(init_points){
         var voronoi = new Voronoi();
@@ -280,36 +320,25 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        new Triangle().generate_points();
+        const method = helper.randomNumber(0, 1);
 
-
-        points = p.triangle();
-        // vector = p.init_voronoi(points);
-        // p.draw_voronoi(vector);
+        switch(method){
+            case 0:
+                new Triangle(p, 240, 3500).generate_points().draw();
+                break;
+            case 1:
+                new RandomVoronoi(p, 100).generate_points().draw();
+                break;
+            default:
+                new RandomVoronoi(p, 100).generate_points().draw();
+        }
+        
 
         p.noLoop(); // no need to loop empty draw
     }
   
     p.draw = function () {
-        // console.log(p.deltaTime)
-        // if(p.deltaTime > 15){
-        //     vector = p.init_voronoi();
-        //     p.draw_voronoi(vector);
-        // }
-
-        // vector[0][0].x = (vector[0][0].x + 1) % width
-
-        // console.log(vector[0][0].x)
-        // var size = 30;
-
-
-        // rect = [p.mouseX - size, p.mouseY - size, size*2]
-
-        // p.color(20);
-        // p.fill(20);
-        // p.rect(rect[0], rect[1], rect[2])
-        // p.clear();
+        // empty
     }
-  }
-
-  new p5(sketch, 'canvas-container');
+}
+new p5(sketch, 'canvas-container');
