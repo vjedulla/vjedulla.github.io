@@ -36,6 +36,74 @@ class helper{
     }
 }
 
+class Weierstrass extends Doodle{
+    constructor(p5inst) {
+        super();
+        this.p = p5inst;
+    }
+
+    generate_points(){
+        let linspace = function(startValue, stopValue, cardinality) {
+            var arr = [];
+            var step = (stopValue - startValue) / (cardinality - 1);
+            for (var i = 0; i < cardinality; i++) {
+                arr.push(startValue + (step * i));
+            }
+            return arr;
+        }
+
+        var xs = linspace(-10, 10, 5000);
+
+        let weierstrass_fn = function(points){
+            const n = 40;
+            var ys = Array(points.length).fill(0);
+
+            const a = 0.5, b = 7;
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < points.length; j++) {
+                    const x = points[j];
+                    var num = Math.pow(a, i) * Math.cos(
+                        Math.pow(b, i) * Math.PI * x
+                    )
+                    ys[j] += num; 
+                }
+            }
+
+            return ys;
+        }
+
+
+        var ys = weierstrass_fn(xs);
+
+        this.points = xs;
+        this.values = ys;
+        return this;
+    }
+
+    draw(){
+
+        const x_scale = 50;
+        const y_scale = 60;
+
+        for (let i = 0; i < this.points.length - 1; i++) {
+            const x_ = this.points[i];
+            const y_ = this.values[i];
+            
+            const x = this.points[i + 1];
+            const y = this.values[i + 1];
+            
+            this.p.strokeWeight(0.2);
+            // console.log(x * 10 + width/2, y*10 - height / 2);
+
+            this.p.line(
+                x_ * x_scale + width/2, y_ * y_scale + height / 2,
+                x * x_scale + width/2, y * y_scale + height / 2
+            );
+        }
+    }
+}
+
 /**
  * Voronoi doodle.
  *
@@ -320,7 +388,10 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        const method = helper.randomNumber(0, 1);
+        var method = helper.randomNumber(0, 2);
+        // method = 2;
+
+        console.log(method);
 
         switch(method){
             case 0:
@@ -328,6 +399,9 @@ function sketch(p) {
                 break;
             case 1:
                 new RandomVoronoi(p, 100).generate_points().draw();
+                break;
+            case 2:
+                new Weierstrass(p).generate_points().draw();
                 break;
             default:
                 new RandomVoronoi(p, 100).generate_points().draw();
