@@ -3,6 +3,59 @@ const box = document.getElementById('canvas-container');
 let width = box.clientWidth;
 let height = box.clientHeight;
 
+
+class helper{
+    randomNumber(){
+        return 4;
+    }
+
+    combine(a, b){
+        console.log('combine');
+    }
+}
+
+
+/**
+ * Abstract Class Doodle.
+ *
+ * @class Doodle
+ */
+ class Doodle {
+    constructor() {
+        if (this.constructor == Doodle) {
+        throw new Error("Abstract classes can't be instantiated.");
+        }
+    }
+
+    generate_points() {
+        throw new Error("Method 'say()' must be implemented.");
+    }
+}
+
+/**
+ * Voronoi doodle.
+ *
+ * @class Voronoi
+ * @extends {Doodle}
+ */
+ class VoronoiD extends Doodle {
+    generate_points() {
+        console.log("voronoi");
+    }
+}
+
+/**
+ * Triangle doodle.
+ *
+ * @class Triangle
+ * @extends {Doodle}
+ */
+ class Triangle extends Doodle {
+    generate_points() {
+        console.log("triangle");
+    }
+}
+
 function sketch(p) {
     p.triangle = function(){
         function randomNumber(a, b){
@@ -227,6 +280,9 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
+        new Triangle().generate_points();
+
+
         points = p.triangle();
         // vector = p.init_voronoi(points);
         // p.draw_voronoi(vector);
