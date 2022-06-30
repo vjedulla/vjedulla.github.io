@@ -36,6 +36,13 @@ class helper{
     }
 }
 
+
+/**
+ * Weierstrass doodle.
+ *
+ * @class Weierstrass
+ * @extends {Doodle}
+ */
 class Weierstrass extends Doodle{
     constructor(p5inst) {
         super();
@@ -52,7 +59,7 @@ class Weierstrass extends Doodle{
             return arr;
         }
 
-        var xs = linspace(-10, 10, 5000);
+        var xs = linspace(-3, 3, 5000);
 
         let weierstrass_fn = function(points){
             const n = 40;
@@ -83,7 +90,7 @@ class Weierstrass extends Doodle{
 
     draw(){
 
-        const x_scale = 50;
+        const x_scale = 115;
         const y_scale = 60;
 
         for (let i = 0; i < this.points.length - 1; i++) {
@@ -281,6 +288,77 @@ class Weierstrass extends Doodle{
     }
 }
 
+
+/**
+ * Mandelbrot doodle.
+ *
+ * @class Mandelbrot
+ * @extends {Doodle}
+ */
+ class Mandelbrot extends Doodle{
+    constructor(p5inst) {
+        super();
+        this.p = p5inst;
+    }
+
+    generate_points(){
+        return this;
+    }
+
+    draw(){
+        this.p.pixelDensity(1);
+        this.p.loadPixels();
+
+        var maxiter = 1000;
+
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+
+                var a = this.p.map(x, 0, width, -3, 2.0);
+                var b = this.p.map(y, 0, height, -1.2, 1.2);
+
+
+                var ca = a;
+                var cb = b;
+
+                var n = 0;
+                var z = 0;
+
+                while(n < maxiter){
+                    var aa = a*a - b*b; // real
+                    var bb = 2*a*b; // imaginary
+
+                    a = ca + aa;
+                    b = cb + bb;
+
+                    if (a * a + b * b > 150){
+                        break;
+                    }
+
+                    n++;
+                }
+
+                var bright = this.p.map(n, 0, maxiter, 0, 1);
+                bright = this.p.map(Math.sqrt(bright), 0, 1, 0, 255);
+                // var bright = 255;
+                if(n == maxiter){
+                    bright = 0;
+                }
+
+                var pix = (x + y * width) * 4;
+                this.p.pixels[pix + 0] = 255 - bright;
+                this.p.pixels[pix + 1] = 255 - bright;
+                this.p.pixels[pix + 2] = 255 - bright;
+                this.p.pixels[pix + 3] = 255; // alpha
+            }
+            
+        }
+
+        this.p.updatePixels();
+    }
+ }
+
+
 function sketch(p) {
 
     p.init_voronoi = function(init_points){
@@ -388,8 +466,8 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 2);
-        // method = 2;
+        var method = helper.randomNumber(0, 3);
+        // method = 3;
 
         console.log(method);
 
@@ -402,6 +480,9 @@ function sketch(p) {
                 break;
             case 2:
                 new Weierstrass(p).generate_points().draw();
+                break;
+            case 3:
+                new Mandelbrot(p).generate_points().draw();
                 break;
             default:
                 new RandomVoronoi(p, 100).generate_points().draw();
