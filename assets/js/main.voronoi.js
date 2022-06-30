@@ -466,7 +466,7 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 3);
+        var method = helper.randomNumber(0, 2);
         // method = 3;
 
         console.log(method);
@@ -480,9 +480,6 @@ function sketch(p) {
                 break;
             case 2:
                 new Weierstrass(p).generate_points().draw();
-                break;
-            case 3:
-                new Mandelbrot(p).generate_points().draw();
                 break;
             default:
                 new RandomVoronoi(p, 100).generate_points().draw();
