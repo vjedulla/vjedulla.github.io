@@ -485,7 +485,6 @@ function sketch(p) {
                 new RandomVoronoi(p, 100).generate_points().draw();
         }
         
-
         p.noLoop(); // no need to loop empty draw
     }
   
