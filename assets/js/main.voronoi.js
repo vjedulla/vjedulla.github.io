@@ -469,7 +469,7 @@ function sketch(p) {
         var method = helper.randomNumber(0, 2);
         // method = 3;
 
-        console.log(method);
+        // console.log(method);
 
         switch(method){
             case 0:
