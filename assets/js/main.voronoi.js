@@ -467,10 +467,7 @@ function sketch(p) {
         p.createCanvas(width, 250);
         
         var method = helper.randomNumber(0, 2);
-        // method = 3;
-
         // console.log(method);
-
         switch(method){
             case 0:
                 new Triangle(p, 240, 3500).generate_points().draw();
