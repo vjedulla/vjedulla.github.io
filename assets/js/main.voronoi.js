@@ -8,10 +8,6 @@ class helper{
     static randomNumber(a, b){
         return parseInt(a + Math.round(Math.random() * (b+1)));   
     }
-
-    combine(a, b){
-        console.log('combine');
-    }
 }
 
 
