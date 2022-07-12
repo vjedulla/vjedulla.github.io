@@ -356,7 +356,6 @@ class Weierstrass extends Doodle{
 
 
 function sketch(p) {
-
     // p.init_voronoi = function(init_points){
     //     var voronoi = new Voronoi();
     //     var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
@@ -480,9 +479,8 @@ function sketch(p) {
         
         p.noLoop(); // no need to loop empty draw
     }
-  
-    p.draw = function () {
-        // empty
-    }
+    // p.draw = function () {
+    //     // empty
+    // }
 }
 new p5(sketch, 'canvas-container');
