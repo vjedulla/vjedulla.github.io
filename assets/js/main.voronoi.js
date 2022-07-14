@@ -479,8 +479,8 @@ function sketch(p) {
         
         p.noLoop(); // no need to loop empty draw
     }
-    // p.draw = function () {
-    //     // empty
-    // }
+    p.draw = function () {
+        // empty
+    }
 }
 new p5(sketch, 'canvas-container');
