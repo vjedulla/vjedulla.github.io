@@ -167,6 +167,139 @@ class Weierstrass extends Doodle{
     }
 }
 
+/**
+ * Voronoi doodle.
+ *
+ * @class Voronoi
+ * @extends {Doodle}
+ */
+ class WebVoronoi extends Doodle {
+    constructor(p5inst, number) {
+        super();
+        this.p = p5inst;
+        this.number = (number == null) ? helper.randomNumber(50, 100) : helper.randomNumber(number * 0.5, number * 1.5);
+    }
+
+    generate_points() {
+        var voronoi = new Voronoi();
+        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+
+        const n = this.number;
+        var points = [];
+        const zoomFactor = helper.randomNumber(3, 6);
+
+        const offsetX = width / 2; //randomNumber(-width*0.25, width * 0.25);
+        const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
+
+        for (let j = 0; j < n; j++) {
+            const w = helper.randomNumber(0, width);
+            const h = helper.randomNumber(0, height);
+            points.push({x: (w * Math.cos(w)) / zoomFactor + offsetX, y: (h * Math.sin(h)) / zoomFactor + offsetY});
+        }
+
+        var diagram = voronoi.compute(points, bbox);
+
+        this.points = points;
+        this.diagram = diagram;
+
+        return this;
+    }
+
+    draw(points, settings){
+        const col_points = this.p.color(217, 63, 81);
+        const col_lines = this.p.color(0, 109, 161);
+
+        this.p.stroke(col_lines);
+
+        for (let i = 0; i < this.diagram.edges.length; i++) {
+            const e = this.diagram.edges[i];
+        
+            if (e.rSite != null && e.lSite != null){
+                this.p.line(e.va.x, e.va.y, e.vb.x, e.vb.y);
+            }
+        }
+
+        // 1/4 of the time draw the points as well
+        if(helper.randomNumber(0, 3) <= 3) return;
+
+        this.p.fill(col_points);
+        this.p.noStroke();
+        for (let index = 0; index < this.points.length; index++) {
+            const element = this.points[index];
+            this.p.circle(element.x, element.y, 3);
+        }
+    }
+}
+
+
+/**
+ * Voronoi doodle.
+ *
+ * @class Voronoi
+ * @extends {Doodle}
+ */
+ class HoneycombVoronoi extends Doodle {
+    constructor(p5inst) {
+        super();
+        this.p = p5inst;
+    }
+
+    generate_points() {
+        var voronoi = new Voronoi();
+        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+
+        var points = [];
+
+        let div_x = helper.randomNumber(3, 10);
+        let div_y = helper.randomNumber(3, 10);
+
+        let offset = (width / helper.randomNumber(8, 20));
+
+        const moveX = width / div_x;
+        const moveY = height / div_y;
+        
+        for (let i = 0; i <= width; i+=moveX) {
+            for (let j = 0, jj=0; j <= height; j+=moveY, jj++) {
+                let new_i = (jj % 2 == 0) ? i + offset : i;
+
+                points.push({x: new_i, y: j})
+            }
+        }
+
+        var diagram = voronoi.compute(points, bbox);
+
+        this.points = points;
+        this.diagram = diagram;
+
+        return this;
+    }
+
+    draw(points, settings){
+        const col_points = this.p.color(217, 63, 81);
+        const col_lines = this.p.color(0, 109, 161);
+
+        this.p.stroke(col_lines);
+
+        for (let i = 0; i < this.diagram.edges.length; i++) {
+            const e = this.diagram.edges[i];
+        
+            if (e.rSite != null && e.lSite != null){
+                this.p.line(e.va.x, e.va.y, e.vb.x, e.vb.y);
+            }
+        }
+
+        return;
+
+        this.p.fill(col_points);
+        this.p.noStroke();
+        for (let index = 0; index < this.points.length; index++) {
+            const element = this.points[index];
+            this.p.circle(element.x, element.y, 3);
+        }
+    }
+}
+
+
 
 /**
  * Triangle doodle.
@@ -356,112 +489,11 @@ class Weierstrass extends Doodle{
 
 
 function sketch(p) {
-    // p.init_voronoi = function(init_points){
-    //     var voronoi = new Voronoi();
-    //     var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
-
-
-    //     function randomNumber(a, b){
-    //         return  parseInt(a + Math.round(Math.random() * (b+1)));   
-    //     }
-
-    //     var method = randomNumber(0, 1); // which method will be executed (sampling)
-    //     const n = randomNumber(20, 50); // how many points
-
-    //     const offsetX = width / 2; //randomNumber(-width*0.25, width * 0.25);
-    //     const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
-    //     const zoomFactor = randomNumber(3, 6);
-
-    //     var points = [];
-
-    //     var A = (width * height) / n;
-    //     var b = Math.ceil(Math.sqrt((A * height) / width));
-    //     var a = Math.ceil((width * b) / height);
-
-    //     var startX = 12, startY = 23, stepX = a, stepY = b, div = Math.ceil(width / a);
-
-    //     for (let j = 0; j < n; j++) {
-    //         const w = randomNumber(0, width);
-    //         const h = randomNumber(0, height);
-            
-    //         if(method == 0){
-    //             points.push({x: (w * Math.cos(w)) / zoomFactor  + offsetX, y: (h * Math.sin(h)) / zoomFactor + offsetY});
-    //         }else if(method == 1){
-    //             points.push({x: w, y: h});
-    //         }else if(method == 2){
-    //             newX = (startX + stepX * j) % width, newY = (startY + stepY * parseInt(j / div)) % height;
-                
-    //             points.push({x: newX, y: newY});
-    //         }
-            
-    //     }
-
-
-    //     if(init_points.length > 0){
-    //         points = [];
-
-    //         for (let i = 0; i < init_points.length; i++) {
-    //             const element = init_points[i];
-    //             points.push({x: element[0], y: element[1]});
-    //         }
-
-    //         method = 0;
-    //     }
-
-
-    //     var diagram = voronoi.compute(points, bbox);
-    //     return [points, diagram, method];
-    // }
-
-
-    // p.draw_voronoi = function(vector){
-    //     var points = vector[0];
-    //     var diagram = vector[1];
-    //     var method = vector[2];
-
-    //     var col_points = null;
-    //     var col_lines = null;
-
-    //     if(method == 1){
-    //         col_points = p.color(217, 63, 81);
-    //         col_lines = p.color(0, 109, 161);
-    //     }else if(method == 0){
-    //         col_points = p.color(0, 109, 161);
-    //         col_lines = p.color(217, 63, 81);
-    //     }else if(method == 2){
-    //         col_points = p.color(0, 109, 161);
-    //         col_lines = p.color(0, 109, 161);
-    //     }
-
-    //     if(method == 1){
-    //         p.fill(col_points);
-    //         p.noStroke();
-    //         for (let index = 0; index < points.length; index++) {
-    //             const element = points[index];
-                
-    //             p.circle(element.x, element.y, 2);
-    //         }
-    //     }
-        
-
-    //     p.stroke(col_lines);
-    //     for (let i = 0; i < diagram.edges.length; i++) {
-    //         const e = diagram.edges[i];
-        
-    //         if (e.rSite != null && e.lSite != null){
-                
-    //             p.line(e.va.x, e.va.y, e.vb.x, e.vb.y);
-    //         }
-    //     }
-    // }
-
-    // var vector = null;
-
-
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 2);
+        var method = helper.randomNumber(0, 4);
+        console.log(method)
 
         switch(method){
             case 0:
@@ -471,6 +503,12 @@ function sketch(p) {
                 new RandomVoronoi(p, 100).generate_points().draw();
                 break;
             case 2:
+                new WebVoronoi(p, 100).generate_points().draw();
+                break;
+            case 3:
+                new HoneycombVoronoi(p).generate_points().draw();
+                break;
+            case 4:
                 new Weierstrass(p).generate_points().draw();
                 break;
             default:
