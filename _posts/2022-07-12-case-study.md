@@ -2,7 +2,7 @@
 layout: post
 title: Convolution [case study]
 subtitle: Why is this concept so convoluted?
-date:   2022-07-22
+date:   2022-07-23
 tags: [case-study, math]
 ---
 
@@ -19,5 +19,10 @@ as moving window multiplication between two functions. This does not sound any b
 $$(f \ast g)(x) = \int_{-\infty}^{\infty} f(\tau)g(x-\tau) d\tau$$
 
 This looks strange, however, combining the idea of moving multiplication and this "simple" equation, we can guess what happens.
-$$\tau$$ here is a new dummy variable for x. Think of it as a offset (lingering back to the moving multiplication idea, something 
+$$\tau$$ here is a dummy variable for x. Think of it as a offset (lingering back to the moving multiplication idea, something 
 has to be moving). 
+
+### Implementation 
+Implementing your own function to compute convolution is not usually recommended, however, for educational purposes the code
+in python looks like this:
+
