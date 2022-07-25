@@ -2,7 +2,7 @@
 layout: post
 title: Convolution [case study]
 subtitle: Why is this concept so convoluted?
-date:   2022-07-23
+date:   2022-07-28
 tags: [case-study, math]
 ---
 
@@ -25,4 +25,9 @@ has to be moving).
 ### Implementation 
 Implementing your own function to compute convolution is not usually recommended, however, for educational purposes the code
 in python looks like this:
+
+
+todo: ccode here
+
+explanation here
 
