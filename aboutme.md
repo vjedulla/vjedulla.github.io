@@ -3,6 +3,7 @@ layout: page
 title: Me
 subtitle: Say hi via the social links.
 permalink: /me/
+show_buy_me: false
 ---
 
 My name is Armando, but everyone calls me Mando.

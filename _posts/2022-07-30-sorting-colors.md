@@ -70,7 +70,7 @@ and sampling do not guarantee that the distance will be kept. This method works 
 have much mathematical theory behind it on why it works. So no guarantee, and apparently does not work for colors. 
 
 However, the secret here that t-SNE method is not all bad news. It gave mathematicians a goal, conceptually. They 
-got to work and made a new method with harder guarantees and sound theoretical background. The method is called UMAP
+got to work and made a new method with harder guarantees and sound theoretical background. The method is called UMAP ([read more](https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction#Uniform_manifold_approximation_and_projection){:target="_blank"}, or [watch here](https://www.youtube.com/watch?v=YPJQydzTLwQ&t=786s&ab_channel=PyData){:target="_blank"})
 and its a topological manifold method that projects dimensions into lower dimensions. The theory behind it is hard,
 however, we don't need the theory to apply it. We only need a library implemented by someone smarter than us. And the results:
 

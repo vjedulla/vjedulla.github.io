@@ -492,7 +492,7 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 4);
+        var method = helper.randomNumber(0, 5);
         console.log(method)
 
         switch(method){
@@ -500,7 +500,7 @@ function sketch(p) {
                 new Triangle(p, 240, 3500).generate_points().draw();
                 break;
             case 1:
-                new RandomVoronoi(p, 100).generate_points().draw();
+                new Triangle(p, 240, 3500).generate_points().draw();
                 break;
             case 2:
                 new WebVoronoi(p, 100).generate_points().draw();
