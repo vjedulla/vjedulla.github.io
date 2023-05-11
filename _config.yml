@@ -14,6 +14,9 @@ author: Armando Alliu
 # --- List of links in the navigation bar --- #
 
 navbar-links:
+  Resources:
+    - Index: "tags"
+    - RSS: "feed.xml"
   About Me: "me"
   # hobbies: "exp"
   # Resources:
@@ -41,7 +44,7 @@ round-avatar: true
 # Uncomment the links you want to show and add your information to each one.
 social-network-links:
   # email: "armando.alliu@gmail.com"
-  rss: false  # remove this line if you don't want to show an RSS link at the bottom
+  rss: true  # remove this line if you don't want to show an RSS link at the bottom
   github: vjedulla
   linkedin: armando-alliu
   instagram: mando.zip
@@ -223,7 +226,7 @@ timezone: "Brussels/Belgium"
 markdown: kramdown
 highlighter: rouge
 permalink: /:year-:title/
-paginate: 5
+paginate: 6
 
 kramdown:
   input: GFM
