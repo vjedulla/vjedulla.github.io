@@ -30,18 +30,7 @@ the mean. That is simple an easy implementation. Can we implement something simi
 Look at the following example:
 
 
-{% highlight python linenos %}
-import numpy as np
 
-window_size = 7
-
-window = np.tril(np.ones((window_size, window_size)))
-values = np.array([1, 2, 3, 4, 5, 6, 7])
-counts = np.arange(1, len(values) + 1).reshape((window_size, 1))
-
-moving_average = ((window @ values) / counts).reshape(-1)
-# output: array([1. , 1.5, 2. , 2.5, 3. , 3.5, 4. ])
-{% endhighlight %}
 
 Lets explore what is happening with this code. There are 2 components of this code that I would like to 
 discuss:

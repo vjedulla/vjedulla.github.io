@@ -250,21 +250,61 @@ class Weierstrass extends Doodle{
 
         var points = [];
 
-        let div_x = helper.randomNumber(3, 10);
-        let div_y = helper.randomNumber(3, 10);
+        let random_divisor = helper.randomNumber(2, 15)
+        let div_x = random_divisor;
+        let div_y = random_divisor;
 
-        let offset = (width / helper.randomNumber(8, 20));
 
         const moveX = width / div_x;
         const moveY = height / div_y;
-        
-        for (let i = 0; i <= width; i+=moveX) {
-            for (let j = 0, jj=0; j <= height; j+=moveY, jj++) {
-                let new_i = (jj % 2 == 0) ? i + offset : i;
 
-                points.push({x: new_i, y: j})
+        const offset = moveX / helper.randomNumber(1, 3);
+
+        // console.log("generate odd")
+        
+        for (let j = 0, jj=0; j <= height + offset; j+=moveY, jj++) {
+            for (let i = 0, ii = 0; i <= width + offset; i+=moveX, ii++) {
+                if (jj % 2 != 0) continue;
+                console.log(i, j)
+                points.push({x: i, y: j})
             }
         }
+
+        // console.log("generate even")
+
+        for (let j = 0, jj=0; j <= height + 2*offset; j+=moveY, jj++) {
+            for (let i = 0, ii = 0; i <= width + 2*offset; i+=moveX, ii++) {
+                if (jj % 2 == 0) continue;
+                console.log(i + offset, j)
+                points.push({x: i+offset, y: j})
+            }
+        }
+
+        // console.log("==============")
+
+        // console.log(width, height)
+
+        // points.push({x: 0, y: 0})
+
+        // points.push({x: 365, y: 0})
+
+        // points.push({x: 730, y: 0})
+
+
+        // points.push({x: 182.5, y: 125})
+
+        // points.push({x: 547, y: 125})
+
+
+        // points.push({x: 0, y: 250})
+
+        // points.push({x: 365, y: 250})
+
+        // points.push({x: 730, y: 250})
+
+        
+        this.points = points;
+
 
         var diagram = voronoi.compute(points, bbox);
 
@@ -302,12 +342,12 @@ class Weierstrass extends Doodle{
 
 
 /**
- * Triangle doodle.
+ * SierpinskiTriangle doodle.
  *
- * @class Triangle
+ * @class SierpinskiTriangle
  * @extends {Doodle}
  */
- class Triangle extends Doodle {
+ class SierpinskiTriangle extends Doodle {
     constructor(p5inst, side_length, number) {
         super();
         this.side = side_length;
@@ -438,7 +478,7 @@ class Weierstrass extends Doodle{
         this.p.pixelDensity(1);
         this.p.loadPixels();
 
-        var maxiter = 1000;
+        var maxiter = 2500;
 
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
@@ -492,25 +532,28 @@ function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 5);
+        var method = helper.randomNumber(0, 4);
         console.log(method)
+
+        // new Mandelbrot(p).generate_points().draw();
 
         switch(method){
             case 0:
-                new Triangle(p, 240, 3500).generate_points().draw();
+                new SierpinskiTriangle(p, 240, 3500).generate_points().draw();
+                break;
                 break;
             case 1:
-                new Triangle(p, 240, 3500).generate_points().draw();
-                break;
-            case 2:
                 new WebVoronoi(p, 100).generate_points().draw();
                 break;
-            case 3:
+            case 2:
                 new HoneycombVoronoi(p).generate_points().draw();
                 break;
-            case 4:
+            case 3:
                 new Weierstrass(p).generate_points().draw();
                 break;
+            // case 4:
+            //     new Mandelbrot(p).generate_points().draw();
+            //     break;
             default:
                 new RandomVoronoi(p, 100).generate_points().draw();
         }
