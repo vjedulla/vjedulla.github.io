@@ -139,9 +139,11 @@
 
   {% include matomo.html %}
 
-  {% if page.comments and site.staticman.repository and site.staticman.branch %}
+  <!-- {% if page.comments and site.staticman.repository and site.staticman.branch %}
   <link rel="stylesheet" href="{{ "/assets/css/staticman.css" | relative_url }}">
-  {% endif %}
+  {% endif %} -->
+
+  <link rel="icon" href="/assets/img/site-icon.png">
 
   {% if page.head-extra %}
     {% for file in page.head-extra %}
