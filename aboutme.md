@@ -6,15 +6,20 @@ permalink: /me/
 show_buy_me: false
 ---
 
-My name is Armando, but everyone calls me Mando.
 
-Data Scientist @ [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. 
+Hey there, I'm Armando, but you can call me Mando. Welcome to my corner of the internet!
 
-Based in Brussels, Belgium. Passion for science, films and photography. If you like any of my posts or just want to say hi,
-hit me up via my social links on the footer of this page.
+Currently, I'm fortunate to be part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Nestled in the vibrant city of Brussels, Belgium. Beyond the realm of data, I find inspiration in various interests other interest as science, films, and photography. They ignite my curiosity and fuel my creative spirit. I firmly believe in the power of storytelling and the ability of data to reveal meaningful insights that can drive positive change.
 
 
-The blog is dedicated to my journey as a Data Scientist. My personal goal here is to fill the gap 
-from my theoretical knowledge, to practical and useful application. Currently, I hold a masters degree in Data Science, and the 
-AWS Solution Architect certification. Past work experiences were focused towards Data Science/Engineering where notably I 
-have worked with clients as Unilever, RESA and Brussels Airport.
+### My Journey
+
+This blog is dedicated to sharing my journey as a Data Scientist. I'm on a mission to bridge my personal gap between theory and practical application. As I continue to learn and grow, I want to share practical insights and useful applications of data science that go beyond just the theoretical knowledge.
+
+### Background and Experience
+
+I hold a master's degree in __Computer Science: Data Science__ and also have the __AWS Solution Architect Associate__ certification under my belt. In my previous roles, I've had the opportunity to work with clients like *Unilever*, *RESA*, and *Brussels Airport*, where I focused on both Data Science and Engineering projects.
+
+### Let's Connect
+
+If you enjoy my posts or simply want to say hi, feel free to reach out to me via the social links in the footer of this page. I'd love to connect with fellow data enthusiasts, share ideas, and engage in stimulating conversations.
