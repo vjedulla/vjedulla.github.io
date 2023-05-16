@@ -9,32 +9,22 @@ share-img: /assets/posts/acc_sim/map_generate.png
 tags: [statistics, simulation]
 ---
 
-In this post we will look at the basic idea behind simulating the world around us. For this purpose we will use a toy problem that happens
-mostly in logistics planning. 
+In this post, we will explore the concept of simulating real-world processes using a toy problem commonly encountered in logistics planning.
 
-#### Problem statement
-> Officials of a city are in need to understand better their emergency responses services and if they are below a given threshold. 
-> How is the distribution of response times in the city? Is there a bottleneck we can resolve?
+## Problem Statement
 
-The statement is a bit vague and no data is provided. How do we go about trying to understand this problem, let alone solve it? We simulate
-the data!
+The officials of a city are interested in gaining a better understanding of their emergency response services. They want to determine if the response times in the city are below a certain threshold and identify any potential bottlenecks that can be addressed.
 
-#### Simulation
-_[Simulation](https://en.wikipedia.org/wiki/Simulation){:target="_blank"} is the imitation of real-worlds processes over time._ It is
-fairly easy to define, and fun to work with. There is one rule in simulation, **always state your assumptions**. If you are not doing that
-someone else is doing it for you. Other than that, the accuracy of your simulator to imitate real-life, depends on how these assumptions 
-hold in the real-world. 
+## Approach: Simulation
 
-As an example, if we are trying to model heights of a population, it is easy to use the 
-[Normal Distribution](https://en.wikipedia.org/wiki/Normal_distribution){:target="_blank"}. This is because height is a continuous measure,
-people do not generally deviate too much from it; that is to say you will see very few people that deviate $$5\sigma$$ from the mean $$\mu$$.
-The motivation of the Normal Distribution is that most of the density is based within the mean ([68-95-99 rule](https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule){:target="_blank"}).
+Simulating the data provides a practical way to analyze and address the problem at hand. [Simulation](https://en.wikipedia.org/wiki/Simulation){:target="_blank"} involves the imitation of real-world processes over time. However, it is essential to explicitly state the assumptions made during the simulation. Failing to do so can lead to inaccurate results.
 
+To illustrate this, let's consider an example involving modeling the heights of a population. Since height is a continuous measure and people generally do not deviate significantly from the average, the [Normal Distribution](https://en.wikipedia.org/wiki/Normal_distribution){:target="_blank"} is an appropriate choice. The Normal Distribution is motivated by the fact that most of the density is concentrated around the mean, as demonstrated by the [68-95-99 rule](https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule){:target="_blank"}.
 
-However, if we would use another distribution like [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution){:target="_blank"} for the height, 
-it would be the same as in high school physics where we approximated cows as sphere (or cubes). It would work, but it would be a bit clunky.
+Using a different distribution, such as the [Binomial Distribution](https://en.wikipedia.org/wiki/Binomial_distribution){:target="_blank"}, to model height would be similar to approximating cows as spheres or cubes in high school physics. While it may work to some extent, it lacks the elegance and accuracy of the Normal Distribution.
 
-_Tangent: if you want to learn why it would have worked, i suggest you read on the [Central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem){:target="_blank"}._
+**Tangent:** If you're interested in understanding why this approximation would have worked, I recommend reading about the [Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem){:target="_blank"}.
+
 
 
 ##### Step 1: Generate a sample dataset
@@ -119,7 +109,7 @@ _Note: We generate a lot of these mixture models to try and understand how many 
 Another interesting thing about GMM is that they are just a bunch of gaussian distributions. We can sample as many points as we want, and we are not bound by any 
 parameter to generate a new sample. 
 
-![Generated GMM](/assets/acc_sim/generated_gmm.png)
+![Generated GMM](/assets/posts/acc_sim/generated_gmm.png)
 
 This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal".
 
