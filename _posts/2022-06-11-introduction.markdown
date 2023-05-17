@@ -5,6 +5,7 @@ date:   2022-06-11
 
 permalink: /hello/
 tags: [introduction, simulation]
+readtime: True
 ---
 
 ## Hello world!

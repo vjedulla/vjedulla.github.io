@@ -31,6 +31,15 @@ layout: base
         </div>
       {% endif %}
 
+      <!-- {% if page.tags.size > 0 %}
+        <div class="blog-tags">
+          <span>Tags:</span>
+          {% for tag in page.tags %}
+            <a href="{{ '/tags' | relative_url }}#{{- tag -}}">{{- tag -}}</a>
+          {% endfor %}
+        </div>
+      {% endif %} -->
+
       {% if page.before-content %}
         <div class="before-content">
           {% for file in page.before-content %}
@@ -43,14 +52,7 @@ layout: base
         {{ content }}
       </article>
 
-      {% if page.tags.size > 0 %}
-        <div class="blog-tags">
-          <span>Tags:</span>
-          {% for tag in page.tags %}
-            <a href="{{ '/tags' | relative_url }}#{{- tag -}}">{{- tag -}}</a>
-          {% endfor %}
-        </div>
-      {% endif %}
+      
 
       {% if page.after-content %}
         <div class="after-content">

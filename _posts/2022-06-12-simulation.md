@@ -7,6 +7,7 @@ date:   2022-06-12
 # thumbnail-img: /assets/img/thumb.png
 share-img: /assets/posts/acc_sim/map_generate.png
 tags: [statistics, simulation]
+readtime: True
 ---
 
 In this post, we will explore the concept of simulating real-world processes using a toy problem commonly encountered in logistics planning.

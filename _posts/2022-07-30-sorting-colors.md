@@ -4,6 +4,7 @@ title: Sorting colors [case study]
 subtitle: Why is it so difficult?
 date:   2022-08-25
 tags: [case-study, jupyter, dimensionality-reduction]
+readtime: True
 ---
 
 

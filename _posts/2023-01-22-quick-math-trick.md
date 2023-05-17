@@ -4,6 +4,7 @@ title: Quick, a math trick!
 subtitle: Moving average in a streaming context.
 date:   2023-01-21
 tags: [quickie, jupyter, linear-algebra]
+readtime: True
 ---
 
 Moving averages are an important metric in many contexts. What is it used for? In a lot of streams of data where 

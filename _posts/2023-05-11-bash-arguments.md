@@ -4,6 +4,8 @@ title: Bash arguments
 subtitle: handle the terminal headaches.
 date:   2023-05-11
 tags: [quickie, bash, engineering]
+readtime: True
+last-updated: 2023-05-17
 ---
 
 This post is going to be quick and concise. The main purpose of this script is to define

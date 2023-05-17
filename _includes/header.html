@@ -86,6 +86,14 @@
             {% if page.readtime %}
               {% include readtime.html %}
             {% endif %}
+            {% if page.tags.size > 0 %}
+              <div class="blog-tags" style="margin: 0">
+                <span>Tags:</span>
+                {% for tag in page.tags %}
+                  <a href="{{ '/tags' | relative_url }}#{{- tag -}}">{{- tag -}}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
           {% endif %}
         </div>
       </div>

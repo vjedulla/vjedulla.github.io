@@ -4,6 +4,7 @@ title: Introduction to Histograms? How do they work? [part 1]
 subtitle: Visualizing multiple dimensions.
 date:   2023-05-01
 tags: [jupyter, analysis]
+readtime: True
 ---
 
 A large part of our time as Data Scientist revolves around exploring and familiarizing ourselves with
