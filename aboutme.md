@@ -18,7 +18,7 @@ This blog is dedicated to sharing my journey as a Data Scientist. I'm on a missi
 
 ### Background and Experience
 
-I hold a master's degree in __Computer Science: Data Science__ and also have the __AWS Solution Architect Associate__ certification under my belt. In my previous roles, I've had the opportunity to work with clients like *Unilever*, *RESA*, and *Brussels Airport*, where I focused on both Data Science and Engineering projects.
+I hold a master's degree in __Computer Science: Data Science__ and also have the __AWS Solution Architect Associate__ certification under my belt. In my previous roles, I've had the opportunity to work with clients like *Unilever*, *RESA*, and *Brussels Airport*, where I focused on both Data Science and Engineering projects. My <a href="/assets/pdf/mando.pdf" target="_blank">current resume</a>.
 
 ### Let's Connect
 
