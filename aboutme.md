@@ -8,13 +8,12 @@ show_buy_me: false
 
 
 Hey there, I'm Armando, but you can call me Mando. Welcome to my corner of the internet!
-
-Currently, I'm fortunate to be part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Nestled in the vibrant city of Brussels, Belgium. Beyond the realm of data, I find inspiration in various interests other interest as science, films, and photography. They ignite my curiosity and fuel my creative spirit. I firmly believe in the power of storytelling and the ability of data to reveal meaningful insights that can drive positive change.
+Currently, I'm part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Beyond the realm of data, I find inspiration in various interests other interest as science, films, and photography.
 
 
 ### My Journey
 
-This blog is dedicated to sharing my journey as a Data Scientist. I'm on a mission to bridge my personal gap between theory and practical application. As I continue to learn and grow, I want to share practical insights and useful applications of data science that go beyond just the theoretical knowledge.
+This blog is dedicated to sharing my journey as a Data Scientist. My goal is to bridge my gap between theory and practical application. As I continue to learn and grow, I want to share practical insights and useful methods, algorithms and more, that go beyond just the theoretical knowledge.
 
 ### Background and Experience
 
@@ -22,4 +21,4 @@ I hold a master's degree in __Computer Science: Data Science__ and also have the
 
 ### Let's Connect
 
-If you enjoy my posts or simply want to say hi, feel free to reach out to me via the social links in the footer of this page. I'd love to connect with fellow data enthusiasts, share ideas, and engage in stimulating conversations.
+If you enjoy my posts or simply want to say "hi", feel free to reach out to me via the social links in the footer of this page. I'd love to connect with fellow data enthusiasts, share ideas, and engage in stimulating conversations.
