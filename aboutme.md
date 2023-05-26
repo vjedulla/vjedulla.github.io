@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Me
+title: me
 subtitle: Say hi via the social links.
 permalink: /me/
 show_buy_me: false
