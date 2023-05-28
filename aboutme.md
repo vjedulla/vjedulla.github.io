@@ -8,7 +8,7 @@ show_buy_me: false
 
 
 Hey there, I'm Armando, but you can call me Mando. Welcome to my corner of the internet!
-Currently, I'm part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Beyond the realm of data, I find inspiration in various interests other interest as science, films, and photography.
+Currently, I'm part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Beyond the realm of data, I find inspiration in various hobbies such as films, and photography.
 
 
 ### My Journey
