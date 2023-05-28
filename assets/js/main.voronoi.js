@@ -245,72 +245,61 @@ class Weierstrass extends Doodle{
     }
 
     generate_points() {
-        var voronoi = new Voronoi();
-        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+        // Initialize Voronoi object and bounding box for Voronoi diagram
+        const voronoi = new Voronoi();
+        const boundingBox = {xl: 0, xr: width, yt: 0, yb: height};
+    
+        const points = [];
+    
+        // Define random divisor using helper function for generating random numbers
 
-        var points = [];
+        let divisorX = helper.randomNumber(5, 15);
+        let divisorY = divisorX / 3; //helper.randomNumber(2, 15);
+    
+        // Calculate the distance between the points in the grid (X and Y directions)
+        const deltaX = width / divisorX;
+        const deltaY = height / divisorY;
+    
+        // Define the offset value for even or odd rows
+        // const randomOffset = helper.randomNumber(2, 6);
+        const offsetX = deltaX / 3;
+        const offsetY = deltaY / 3;
 
-        let random_divisor = helper.randomNumber(2, 15)
-        let div_x = random_divisor;
-        let div_y = random_divisor;
-
-
-        const moveX = width / div_x;
-        const moveY = height / div_y;
-
-        const offset = moveX / helper.randomNumber(1, 3);
-
-        // console.log("generate odd")
-        
-        for (let j = 0, jj=0; j <= height + offset; j+=moveY, jj++) {
-            for (let i = 0, ii = 0; i <= width + offset; i+=moveX, ii++) {
-                if (jj % 2 != 0) continue;
-                console.log(i, j)
-                points.push({x: i, y: j})
+        // console.log("Parameters:")
+        // console.log("divisorX: ", divisorX)
+        // console.log("divisorY: ", divisorY)
+        // console.log("randomOffset: ", randomOffset)
+        // console.log("deltaX: ", deltaX)
+        // console.log("deltaY: ", deltaY)
+    
+        // Generate points for odd rows
+        for (let y = 0, row = 0; y <= height + offsetY; y += deltaX, row++) {
+            if (row % 2 !== 0) continue;  // Skip even rows
+            for (let x = 0; x <= width + offsetY; x += deltaX) {
+                // console.log(x, y);
+                points.push({x, y});
+            }
+        }
+    
+        // Generate points for even rows with offset
+        for (let y = 0, row = 0; y <= height * offsetX; y += deltaX, row++) {
+            if (row % 2 === 0) continue;  // Skip odd rows
+            for (let x = 0; x <= width * offsetX; x += deltaY) {
+                // console.log(x + offset, y);
+                points.push({x: x + offsetX, y});
             }
         }
 
-        // console.log("generate even")
-
-        for (let j = 0, jj=0; j <= height + 2*offset; j+=moveY, jj++) {
-            for (let i = 0, ii = 0; i <= width + 2*offset; i+=moveX, ii++) {
-                if (jj % 2 == 0) continue;
-                console.log(i + offset, j)
-                points.push({x: i+offset, y: j})
-            }
-        }
-
-        // console.log("==============")
-
-        // console.log(width, height)
-
-        // points.push({x: 0, y: 0})
-
-        // points.push({x: 365, y: 0})
-
-        // points.push({x: 730, y: 0})
-
-
-        // points.push({x: 182.5, y: 125})
-
-        // points.push({x: 547, y: 125})
-
-
-        // points.push({x: 0, y: 250})
-
-        // points.push({x: 365, y: 250})
-
-        // points.push({x: 730, y: 250})
-
-        
-        this.points = points;
-
-
-        var diagram = voronoi.compute(points, bbox);
-
+        console.log(points)
+    
+        // Compute Voronoi diagram using the generated points
+        const diagram = voronoi.compute(points, boundingBox);
+    
+        // Assign the points and Voronoi diagram to instance variables
         this.points = points;
         this.diagram = diagram;
-
+    
+        // Return the instance for method chaining
         return this;
     }
 
@@ -328,7 +317,7 @@ class Weierstrass extends Doodle{
             }
         }
 
-        return;
+        // return;
 
         this.p.fill(col_points);
         this.p.noStroke();
@@ -515,9 +504,9 @@ class Weierstrass extends Doodle{
                 }
 
                 var pix = (x + y * width) * 4;
-                this.p.pixels[pix + 0] = 255 - bright;
-                this.p.pixels[pix + 1] = 255 - bright;
-                this.p.pixels[pix + 2] = 255 - bright;
+                this.p.pixels[pix + 0] = bright;
+                this.p.pixels[pix + 1] = bright;
+                this.p.pixels[pix + 2] = bright;
                 this.p.pixels[pix + 3] = 255; // alpha
             }
             
@@ -527,20 +516,81 @@ class Weierstrass extends Doodle{
     }
  }
 
+ class BiFurcation extends Doodle{
+    constructor(p5inst) {
+        super();
+        this.p = p5inst;
+    }
+
+    generate_points(){
+        let points = []
+
+        let from = 0;
+        let to = 399999;
+        let divider = 100000;
+        let step = 100;
+        
+        for (let r = from; r < to; r+=step) {
+            let random_start = helper.randomNumber(20, 80);
+            let x_n = random_start / 100;
+            let x_n_1 = 0;
+
+            for (let i = 0; i < 100; i++) {
+                x_n_1 = r/divider * x_n * (1 - x_n);
+                x_n = x_n_1;
+            }
+            
+            if(r/divider > 1 && x_n_1 < 0.01){
+                continue;
+            }
+            
+            points.push({x: r/divider * width / 4, y: x_n_1 * -(height) + height - 1}); // stable value
+            
+            if(r % 10000 == 0){
+                // console.log(r, step)
+                step = Math.max(4, step - 10);
+            }
+        }
+        
+        this.points = points;
+
+        return this;
+    }
+
+    draw(){
+        const col_points = this.p.color(217, 63, 81);
+        const col_lines = this.p.color(0, 109, 161);
+
+        this.p.stroke(col_lines);
+
+        const size_sm = 1.2;
+        const cx = width/2, cy = height/2;
+
+        for (let i = 0; i < this.points.length; i++) {
+            const x = this.points[i].x;
+            const y = this.points[i].y;
+
+            // console.log(x, y)
+
+            this.p.noStroke();
+            this.p.fill(100);
+            this.p.circle(x, y, size_sm);
+        }
+    }
+ }
+
 
 function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
         var method = helper.randomNumber(0, 4);
+        // method = 2;
         console.log(method)
-
-        // new Mandelbrot(p).generate_points().draw();
 
         switch(method){
             case 0:
                 new SierpinskiTriangle(p, 240, 3500).generate_points().draw();
-                break;
                 break;
             case 1:
                 new WebVoronoi(p, 100).generate_points().draw();
@@ -551,11 +601,11 @@ function sketch(p) {
             case 3:
                 new Weierstrass(p).generate_points().draw();
                 break;
-            // case 4:
-            //     new Mandelbrot(p).generate_points().draw();
-            //     break;
+            case 4:
+                new BiFurcation(p).generate_points().draw();
+                break;
             default:
-                new RandomVoronoi(p, 100).generate_points().draw();
+                new RandomVoronoi(p, 200).generate_points().draw();
         }
         
         p.noLoop(); // no need to loop empty draw
