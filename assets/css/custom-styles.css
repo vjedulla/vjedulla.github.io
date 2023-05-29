@@ -1,3 +1,26 @@
 .navbar-custom .avatar-container .avatar-img{
     border-radius: 25%;
 }
+
+.post-preview{
+    /* border-bottom: 1px dashed #bbbbbb; */
+    border: none;
+
+    border-right: 1px dashed #bbbbbb;
+    /* border-radius: 0.8rem; */
+    position: relative;
+}
+
+.post-preview::after{
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #404040;
+    bottom: 0px;
+    right: 0px;
+}
+
+.pagination{
+    margin: 3.625rem 0 0;
+}

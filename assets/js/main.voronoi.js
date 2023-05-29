@@ -8,6 +8,23 @@ class helper{
     static randomNumber(a, b){
         return parseInt(a + Math.round(Math.random() * (b+1)));   
     }
+
+    static binomialCoefficient(n, k) {
+        // Handle base cases
+        if (k === 0 || k === n) {
+          return 1;
+        }
+        
+        // Initialize the result
+        let result = 1;
+        
+        // Calculate the coefficient using Pascal's triangle
+        for (let i = 1; i <= k; i++) {
+          result = result * (n - i + 1) / i;
+        }
+        
+        return result;
+      }
 }
 
 
@@ -580,13 +597,131 @@ class Weierstrass extends Doodle{
  }
 
 
+ class BlueNoise extends Doodle{
+    constructor(p5inst) {
+        super();
+        this.p = p5inst;
+        this.max_radius = helper.randomNumber(20, 30);
+    }
+
+    generate_points(){
+        const minDistance = this.max_radius * Math.sqrt(2) + 0.2;
+        const points = [];
+        const activePoints = [];
+        
+        // Helper function to check if a point is inside the canvas
+        function isInCanvas(x, y, rad) {
+            return x >= 0 && x < width && y >= 0 && y < height
+                    && x+rad < width && y+rad < height
+                    && x-rad >= 0 && y-rad >= 0;
+        }
+        
+        // Helper function to check if a point is too close to existing points
+        function isFarEnough(x, y) {
+            for (const point of points) {
+                const dx = x - point.x;
+                const dy = y - point.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < minDistance) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Pick a random starting point
+        // const startX = Math.floor(Math.random() * width);
+        // const startY = Math.floor(Math.random() * height);
+
+        const startX = width / 2;
+        const startY = height / 2;
+        
+        // Add the starting point to the active points list
+        activePoints.push({ x: startX, y: startY });
+        
+        while (activePoints.length > 0) {
+            // Pick a random active point
+            const index = Math.floor(Math.random() * activePoints.length);
+            const activePoint = activePoints[index];
+            
+            // Generate new points around the active point
+            for (let i = 0; i < 50; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * minDistance + minDistance;
+                
+                const x = Math.round(activePoint.x + Math.cos(angle) * distance);
+                const y = Math.round(activePoint.y + Math.sin(angle) * distance);
+                
+                if (isInCanvas(x, y, this.max_radius) && isFarEnough(x, y)) {
+                    // Add the new point to the points list and active points list
+                    points.push({ x, y });
+                    activePoints.push({ x, y });
+                }
+            }
+            
+            // Remove the active point from the active points list
+            activePoints.splice(index, 1);
+        }
+            
+        this.points = points;
+
+        return this;
+    }
+
+    draw(){
+        const col_points = this.p.color(69, 69, 69);
+        
+        const size_sm = helper.randomNumber(this.max_radius / 1.8, this.max_radius / 1.4);
+
+        const col_lines = this.p.color(2, 84, 100);
+        this.p.stroke(col_lines);
+
+        // console.log(this.points.length)
+
+        let allow_link_to = size_sm * 2.5;
+        for(let i = 0; i < this.points.length - 1; i++){
+            for(let j = 0; j < this.points.length - 1; j++){
+                let rnd_number = helper.randomNumber(0, 1000);
+
+                if( i == j || rnd_number < 50){
+                    // console.log(i, j, rnd_number, rnd_number < 50)
+                    break;
+                }
+
+                let pa = this.points[i];
+                let pb = this.points[j];
+
+                const distance = Math.sqrt((pa.x - pb.x) * (pa.x - pb.x)  + (pa.y - pb.y) * (pa.y - pb.y));
+                
+                if(distance < allow_link_to){
+                    this.p.line(pa.x, pa.y, pb.x, pb.y);
+                }
+            }
+        }
+
+        
+        for (let i = 0; i < this.points.length; i++) {
+            const x = this.points[i].x;
+            const y = this.points[i].y;
+
+            this.p.noStroke();
+            this.p.fill(col_points);
+            this.p.circle(x, y, size_sm);
+        }
+
+
+    }
+ }
+
 function sketch(p) {
     p.setup = function () {
         p.createCanvas(width, 250);
         
-        var method = helper.randomNumber(0, 4);
-        // method = 2;
-        console.log(method)
+        var method = helper.randomNumber(0, 5);
+        // method = 5;
+        console.log("method:", method)
 
         switch(method){
             case 0:
@@ -603,6 +738,9 @@ function sketch(p) {
                 break;
             case 4:
                 new BiFurcation(p).generate_points().draw();
+                break;
+            case 5:
+                new BlueNoise(p).generate_points().draw();
                 break;
             default:
                 new RandomVoronoi(p, 200).generate_points().draw();

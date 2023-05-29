@@ -16,7 +16,7 @@ we can say that we both make estimations errors normally distributed (hehe. NO! 
 
 
 ## Formal representation
-To generalize this problem say that two people come up with two guesses, $$A$$ and $$B$$ and $$\sigma_1^2$$ and $$\sigma_2^2$$ variances
+To formalize this problem say that two people come up with two guesses, $$A$$ and $$B$$ and $$\sigma_1^2$$ and $$\sigma_2^2$$ variances
 respectively. To generate a better guess $$Y$$ we can combine it using a $$p$$ probability of blending first guess, and $$(1-p)$$ of 
 blending the second as such:
 
