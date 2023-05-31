@@ -14,9 +14,10 @@ author: Armando Alliu
 # --- List of links in the navigation bar --- #
 
 navbar-links:
-  Resources:
-    - Index: "tags"
-    - RSS: "feed.xml"
+  Blog: "/"
+  # Resources:
+  #   - Index: "tags"
+  #   - RSS: "feed.xml"
   About Me: "me"
   # hobbies: "exp"
   # Resources:
