@@ -16,14 +16,19 @@ From personal experience, you would count some popular countries that validate y
 
 <img src="/assets/posts/benford/benfords_law_world_population.png" style="display: block; margin: auto"/>
 
-How can this happen? Well, Benford's Law. (Re)Introduced by the physicist Frank Benford, it states that - _"... in many real-life sets of numerical data, the leading digit is likely to be small."_ In this blog post I will try to justify it why that happens, and what are some usecases of this empirical law. 
+How can this happen? Well, Benford's Law. (Re)Introduced by the physicist Frank Benford, it states that - _"... in many real-life sets of numerical data, the leading digit is likely to be small."_ In this blog post I will try to justify it why that happens, and what are some use cases of this empirical law. 
 
-$$P(d_1) = log_{10}(1 + \frac{1}{d}) \space \space ∀d_1 ∈ \{1,2,3,…,9\}$$
+$$P(D_1 = d_1) = log_{10}(1 + \frac{1}{d_1}) \space \space ∀d_1 ∈ \{1,2,3,…,9\}$$
 
-Which means that the probability that the leading digit is **1** is $$P(d_1 = 1) = 30.1\%$$, and **2** is $$P(d_1 = 2) = 17.61\%$$ ... up to $$P(d_1 = 9) = 4.58\%$$. This seems strange. Because the implication is that if we get a real-world dataset like - _world tallest structures_, _numbers that appear in the financial times_, _volume of trading in any stock exchange_, _video lengths in youtube_, etc. - we can expect that the leading number is 1/3 of the time 1. And the strangest thing is that it does not depend on unit, that is to say that if we take the _world tallest structures_ in meters, or feet, they will both conform to Benford's law leading digit frequency.
+Which means that the probability that the leading digit **1** is $$P(d_1 = 1) = 30.1\%$$, and for **2** is $$P(d_1 = 2) = 17.61\%$$ ... up to $$P(d_1 = 9) = 4.58\%$$. This seems odd. Because it implies that given a real-world dataset like - _population of countries_, _area of countries_, _world tallest structures_, _numbers that appear in the financial times_, _volume of trading in any stock exchange_, _video lengths in youtube_, etc. - we can expect the leading number to be 1, a third of the time. And the strangest thing is that it does not depend on unit, that is to say that if we take the _world tallest structures_ in meters, or feet, they will both conform to Benford's law leading digit frequency.
+
+
+{: .box-warning}
+**Warning:** There is a caveat to applying this law. To apply Benford's law you should keep in mind that the dataset you have at hand has a good deal of range, spanning several orders of magnitude. A rule of thumb would be 3-4 orders of magnitude from the minimum to maximum value should be more than enough. That is not an issue in most datasets, except for specific datasets like _adult human height_ which spans from 1.3 - 2.3 meters approx.
 
 ## The intuition behind it
-Personally, what surprised me about this distribution is that if we take numbers from 1 to 1000, we know that there will be exactly 1 + 10 + 100 = 111 numbers with each leading digit. Why would this distribution occur then? We have to simulate!
+
+In my personal experience, I found it surprising that when considering numbers from 1 to 1000, the distribution of leading digits follows a specific pattern. Specifically, we observe that there are exactly 1 + 10 + 100 = 111 numbers for each leading digit (1 to 9). This pattern, where the count of numbers for each leading digit follows a power of 10, intrigued me. Why would this distribution occur then? To understand why this distribution occurs, we need to simulate and explore further.
 
 First let me generate a bunch of numbers in python and see how the probability of having a specific leading digit changes over time.
 
@@ -59,13 +64,13 @@ The plot above shows a sawtooth pattern of the probability of a digit occurring 
 
 Another way that plays a major role into this distribution is the relative difference between numbers. Say that we have the number 100, if we want to increase it to 200, we say that we have increased it by 100%. Let's then see about 900, if we want to increase it by the same absolute value, we get to 1000, but that is a mere 10% increase. What this implies is that a number that is in the range of 900, is far easier to jump into the range of 1000, and by the same token the frequency of the leading digit moves from 9 to 1, making 1 more probable. Whereas in the other hand, having a value equal to 100, we have to have a 100% increase to change the leading digit. 
 
+__Not just the leading digit__, Benford's law can be applied further to the first two leading digits. This is a bit more specific and involved, but the intuition is very similar as with the leading digit. 
+
+$$P(D_1D_2 = d_1d_2) = log_{10}(1 + \frac{1}{d_1d_2}) \space \space ∀d_1d_2 ∈ \{10,11,…,99\}$$
 
 
 ## Applications
 Having a formula on how distributions of a large array of datasets should look like, is a very powerful tool to have on your tool belt. One very practical use case of Benford's law is in accounting. More specifically, **forensic accounting**, that is to discover unlawful behaviour in shady businesses. In fact fraud detection based on Benford's law should be one of the first tests to do when you do not know where to start. It is simple and might help you to focus on the digits that do not "behave" to the pattern. 
-
-{: .box-warning}
-**Warning:** To apply Benford's law you should keep in mind that the dataset you have at hand has a good deal of range, spanning multiple orders of magnitude. A rule of thumb would be 3-4 orders of magnitude from the minimum to maximum value should be more than enough. 
 
 To test the goodness of fit for Benford's law we can use a variety of metrics, such as MAD (mean absolute deviation), formally stated as such:
 
