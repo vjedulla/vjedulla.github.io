@@ -2,7 +2,7 @@
 layout: post
 title: Blending guesses
 subtitle: estimating a celebrity's age.
-date: 2023-05-11
+date: 2023-05-28
 tags: [statistics]
 readtime: True
 last-updated: 2023-05-28
@@ -75,4 +75,4 @@ $$Y = (0.169) * 50 + (1 - 0.169) * 60$$
 
 $$Y = 58.31$$
 
-According to wikipedia, [Keanu Reeves](https://en.wikipedia.org/wiki/Keanu_Reeves) is 58 years old exactly.
+According to wikipedia, [Keanu Reeves](https://en.wikipedia.org/wiki/Keanu_Reeves){:target="_blank"} is 58 years old exactly.

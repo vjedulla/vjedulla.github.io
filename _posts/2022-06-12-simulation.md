@@ -112,7 +112,7 @@ parameter to generate a new sample.
 
 ![Generated GMM](/assets/posts/acc_sim/generated_gmm.png)
 
-This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal".
+This works well for small number of points (which is our goal), however, we if we sample more we can see the gaussians clusters which are not that "ideal."
 
 ##### Step 3: Analysis
 Now we have come to the interesting part of this post. First we need a couple of emergency care centers like hospitals, but this analysis is 
