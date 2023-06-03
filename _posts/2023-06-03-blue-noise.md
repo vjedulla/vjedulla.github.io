@@ -67,7 +67,7 @@ def generate_new_random_point(density, index_arr, n_points):
 {% endhighlight %}
 
 This is a trick to get the next random point to abide by the rule about the spacing radius. However, this does not ensure 100% that we get 
-correct blue noise. 
+correct blue noise (see [figure 3](#figure-3)). 
 
 
 {% include 
@@ -80,8 +80,6 @@ correct blue noise.
 This is close to what we want but not exactly. We need a way to only select the points that have broken the first rule, remove them, and add new 
 points that are much obedient.
 
-graph_connected_components.png
-
 {% include 
     figure.html 
     image="/assets/posts/blue_noise/graph_connected_components.png" 
@@ -89,11 +87,8 @@ graph_connected_components.png
     caption="Creating a graph structure with the nodes that violate the spacing rule." 
 %}
 
-Using some `numpy` matrix manipulation and the library `networkx` we can find every node that breaks the rule and connect them together. Now from this
-point we iterate over each connected component, and find the middle point. We remove the connected component and add in the new point. This method
-however is not perfect, and may sometimes fail due to something called convex hull of the points. When we find the mean/middle of the points, we are
-implicitly creating a convex hull of all points and we are finding the middle of that shape. However, if that shape is mostly concentrated on the edges
-it might be the case that the new point we introduce will break the rule we have for the spacing. However, in practice this is not that visible.
+Using some `numpy` matrix manipulation and the library `networkx` we can find every node that breaks the rule and connect them together 
+(see [figure 4](#figure-4)). Now from this point we iterate over each connected component, and find the middle point. We remove the connected component and add in the new point. This method however is not perfect, and may sometimes fail due to something called convex hull of the points. When we find the mean/middle of the points, we are implicitly creating a convex hull of all points and we are finding the middle of that shape. However, if that shape is mostly concentrated on the edges it might be the case that the new point we introduce will break the rule we have for the spacing. However, in practice this is not that visible.
 
 
 ## Conclusion
