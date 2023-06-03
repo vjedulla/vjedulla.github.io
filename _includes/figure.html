@@ -1,4 +1,6 @@
-<figure id="figure-{{ include.id }}" style="display: block; margin: auto">
-    <img src="{{ include.image }}" alt="{{ include.caption }}">
-    <figcaption style="text-align: center;"><b>Figure {{ include.id }}:</b> {{ include.caption }}</figcaption>
+<figure id="figure-{{ include.id }}" style="display: flex; justify-content: center; align-items: center;">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <img src="{{ include.image }}" alt="{{ include.caption }}" loop="1">
+        <figcaption style="text-align: center;"><b>Figure {{ include.id }}:</b> {{ include.caption }}</figcaption>
+    </div>
 </figure>
