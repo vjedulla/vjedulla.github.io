@@ -1,7 +1,5 @@
-const box = document.getElementById('canvas-container');
-
-let width = box.clientWidth;
-let height = box.clientHeight;
+let WIDTH = null;
+let HEIGHT = null;
 
 
 class helper{
@@ -34,10 +32,12 @@ class helper{
  * @class Doodle
  */
  class Doodle {
-    constructor() {
+    constructor(p5inst) {
         if (this.constructor == Doodle) {
-        throw new Error("Abstract classes can't be instantiated.");
+            throw new Error("Abstract classes can't be instantiated.");
         }
+
+        this.p = p5inst;
     }
 
     generate_points() {
@@ -46,6 +46,19 @@ class helper{
 
     draw(points, settings){
         throw new Error("Method 'draw()' must be implemented.");
+    }
+
+    animate(){
+        // nothing by default
+        this.p.noLoop();
+    }
+
+    mouseMoved(){
+        return false;
+    }
+
+    mousePressed(){
+        return false;
     }
 }
 
@@ -58,8 +71,7 @@ class helper{
  */
 class Weierstrass extends Doodle{
     constructor(p5inst) {
-        super();
-        this.p = p5inst;
+        super(p5inst);
     }
 
     generate_points(){
@@ -114,13 +126,15 @@ class Weierstrass extends Doodle{
             const y = this.values[i + 1];
             
             this.p.strokeWeight(0.2);
-            // console.log(x * 10 + width/2, y*10 - height / 2);
+            // console.log(x * 10 + WIDTH/2, y*10 - HEIGHT / 2);
 
             this.p.line(
-                x_ * x_scale + width/2, y_ * y_scale + height / 2,
-                x * x_scale + width/2, y * y_scale + height / 2
+                x_ * x_scale + WIDTH/2, y_ * y_scale + HEIGHT / 2,
+                x * x_scale + WIDTH/2, y * y_scale + HEIGHT / 2
             );
         }
+
+        return this;
     }
 }
 
@@ -139,14 +153,14 @@ class Weierstrass extends Doodle{
 
     generate_points() {
         var voronoi = new Voronoi();
-        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+        var bbox = {xl: 0, xr: WIDTH, yt: 0, yb: HEIGHT}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
 
         const n = this.number;
         var points = [];
 
         for (let j = 0; j < n; j++) {
-            const w = helper.randomNumber(0, width);
-            const h = helper.randomNumber(0, height);
+            const w = helper.randomNumber(0, WIDTH);
+            const h = helper.randomNumber(0, HEIGHT);
             points.push({x: w, y: h});
         }
 
@@ -181,6 +195,8 @@ class Weierstrass extends Doodle{
             const element = this.points[index];
             this.p.circle(element.x, element.y, 3);
         }
+
+        return this;
     }
 }
 
@@ -191,26 +207,26 @@ class Weierstrass extends Doodle{
  * @extends {Doodle}
  */
  class WebVoronoi extends Doodle {
-    constructor(p5inst, number) {
-        super();
-        this.p = p5inst;
-        this.number = (number == null) ? helper.randomNumber(50, 100) : helper.randomNumber(number * 0.5, number * 1.5);
+    constructor(p5inst) {
+        super(p5inst);
+        let number = 100;
+        this.number = helper.randomNumber(number * 0.5, number * 1.5);
     }
 
     generate_points() {
         var voronoi = new Voronoi();
-        var bbox = {xl: 0, xr: width, yt: 0, yb: height}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
+        var bbox = {xl: 0, xr: WIDTH, yt: 0, yb: HEIGHT}; // xl is x-left, xr is x-right, yt is y-top, and yb is y-bottom
 
         const n = this.number;
         var points = [];
         const zoomFactor = helper.randomNumber(3, 6);
 
-        const offsetX = width / 2; //randomNumber(-width*0.25, width * 0.25);
-        const offsetY = height / 2; // randomNumber(-height * 0.25, height * 0.25);
+        const offsetX = WIDTH / 2; //randomNumber(-WIDTH*0.25, WIDTH * 0.25);
+        const offsetY = HEIGHT / 2; // randomNumber(-HEIGHT * 0.25, HEIGHT * 0.25);
 
         for (let j = 0; j < n; j++) {
-            const w = helper.randomNumber(0, width);
-            const h = helper.randomNumber(0, height);
+            const w = helper.randomNumber(0, WIDTH);
+            const h = helper.randomNumber(0, HEIGHT);
             points.push({x: (w * Math.cos(w)) / zoomFactor + offsetX, y: (h * Math.sin(h)) / zoomFactor + offsetY});
         }
 
@@ -222,7 +238,7 @@ class Weierstrass extends Doodle{
         return this;
     }
 
-    draw(points, settings){
+    draw(){
         const col_points = this.p.color(217, 63, 81);
         const col_lines = this.p.color(0, 109, 161);
 
@@ -237,7 +253,9 @@ class Weierstrass extends Doodle{
         }
 
         // 1/4 of the time draw the points as well
-        if(helper.randomNumber(0, 3) <= 3) return;
+        if(helper.randomNumber(0, 3) <= 3){
+            return this;
+        }
 
         this.p.fill(col_points);
         this.p.noStroke();
@@ -245,6 +263,8 @@ class Weierstrass extends Doodle{
             const element = this.points[index];
             this.p.circle(element.x, element.y, 3);
         }
+
+        return this;
     }
 }
 
@@ -257,14 +277,13 @@ class Weierstrass extends Doodle{
  */
  class HoneycombVoronoi extends Doodle {
     constructor(p5inst) {
-        super();
-        this.p = p5inst;
+        super(p5inst);
     }
 
     generate_points() {
         // Initialize Voronoi object and bounding box for Voronoi diagram
         const voronoi = new Voronoi();
-        const boundingBox = {xl: 0, xr: width, yt: 0, yb: height};
+        const boundingBox = {xl: 0, xr: WIDTH, yt: 0, yb: HEIGHT};
     
         const points = [];
     
@@ -274,8 +293,8 @@ class Weierstrass extends Doodle{
         let divisorY = divisorX / 3; //helper.randomNumber(2, 15);
     
         // Calculate the distance between the points in the grid (X and Y directions)
-        const deltaX = width / divisorX;
-        const deltaY = height / divisorY;
+        const deltaX = WIDTH / divisorX;
+        const deltaY = HEIGHT / divisorY;
     
         // Define the offset value for even or odd rows
         // const randomOffset = helper.randomNumber(2, 6);
@@ -290,24 +309,24 @@ class Weierstrass extends Doodle{
         // console.log("deltaY: ", deltaY)
     
         // Generate points for odd rows
-        for (let y = 0, row = 0; y <= height + offsetY; y += deltaX, row++) {
+        for (let y = 0, row = 0; y <= HEIGHT + offsetY; y += deltaX, row++) {
             if (row % 2 !== 0) continue;  // Skip even rows
-            for (let x = 0; x <= width + offsetY; x += deltaX) {
+            for (let x = 0; x <= WIDTH + offsetY; x += deltaX) {
                 // console.log(x, y);
                 points.push({x, y});
             }
         }
     
         // Generate points for even rows with offset
-        for (let y = 0, row = 0; y <= height * offsetX; y += deltaX, row++) {
+        for (let y = 0, row = 0; y <= HEIGHT * offsetX; y += deltaX, row++) {
             if (row % 2 === 0) continue;  // Skip odd rows
-            for (let x = 0; x <= width * offsetX; x += deltaY) {
+            for (let x = 0; x <= WIDTH * offsetX; x += deltaY) {
                 // console.log(x + offset, y);
                 points.push({x: x + offsetX, y});
             }
         }
 
-        console.log(points)
+        // console.log(points)
     
         // Compute Voronoi diagram using the generated points
         const diagram = voronoi.compute(points, boundingBox);
@@ -342,6 +361,8 @@ class Weierstrass extends Doodle{
             const element = this.points[index];
             this.p.circle(element.x, element.y, 3);
         }
+
+        return this;
     }
 }
 
@@ -354,11 +375,10 @@ class Weierstrass extends Doodle{
  * @extends {Doodle}
  */
  class SierpinskiTriangle extends Doodle {
-    constructor(p5inst, side_length, number) {
-        super();
-        this.side = side_length;
-        this.p = p5inst;
-        this.number = (number == null) ? 2000 : number;
+    constructor(p5inst) {
+        super(p5inst);
+        this.side = 240;
+        this.number = 3500;
     }
 
     random_idx(points){
@@ -445,7 +465,7 @@ class Weierstrass extends Doodle{
         const sps = this.side_points;
         const size_bg = 5;
         const size_sm = 1;
-        const cx = width/2, cy = height/2;
+        const cx = WIDTH/2, cy = HEIGHT/2;
 
         this.p.noStroke();
         this.p.fill(100);
@@ -460,6 +480,8 @@ class Weierstrass extends Doodle{
             this.p.fill(100);
             this.p.circle(this.points[i].x + cx, this.points[i].y + cy, size_sm);
         }
+
+        return this;
     }
 }
 
@@ -486,11 +508,11 @@ class Weierstrass extends Doodle{
 
         var maxiter = 2500;
 
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
+        for (let x = 0; x < WIDTH; x++) {
+            for (let y = 0; y < HEIGHT; y++) {
 
-                var a = this.p.map(x, 0, width, -3, 2.0);
-                var b = this.p.map(y, 0, height, -1.2, 1.2);
+                var a = this.p.map(x, 0, WIDTH, -3, 2.0);
+                var b = this.p.map(y, 0, HEIGHT, -1.2, 1.2);
 
 
                 var ca = a;
@@ -520,7 +542,7 @@ class Weierstrass extends Doodle{
                     bright = 0;
                 }
 
-                var pix = (x + y * width) * 4;
+                var pix = (x + y * WIDTH) * 4;
                 this.p.pixels[pix + 0] = bright;
                 this.p.pixels[pix + 1] = bright;
                 this.p.pixels[pix + 2] = bright;
@@ -530,13 +552,14 @@ class Weierstrass extends Doodle{
         }
 
         this.p.updatePixels();
+
+        return this;
     }
  }
 
  class BiFurcation extends Doodle{
     constructor(p5inst) {
-        super();
-        this.p = p5inst;
+        super(p5inst);
     }
 
     generate_points(){
@@ -561,7 +584,7 @@ class Weierstrass extends Doodle{
                 continue;
             }
             
-            points.push({x: r/divider * width / 4, y: x_n_1 * -(height) + height - 1}); // stable value
+            points.push({x: r/divider * WIDTH / 4, y: x_n_1 * -(HEIGHT) + HEIGHT - 1}); // stable value
             
             if(r % 10000 == 0){
                 // console.log(r, step)
@@ -581,7 +604,7 @@ class Weierstrass extends Doodle{
         this.p.stroke(col_lines);
 
         const size_sm = 1.2;
-        const cx = width/2, cy = height/2;
+        const cx = WIDTH/2, cy = HEIGHT/2;
 
         for (let i = 0; i < this.points.length; i++) {
             const x = this.points[i].x;
@@ -593,14 +616,15 @@ class Weierstrass extends Doodle{
             this.p.fill(100);
             this.p.circle(x, y, size_sm);
         }
+
+        return this;
     }
  }
 
 
  class BlueNoise extends Doodle{
     constructor(p5inst) {
-        super();
-        this.p = p5inst;
+        super(p5inst);
         this.max_radius = helper.randomNumber(20, 30);
     }
 
@@ -611,8 +635,8 @@ class Weierstrass extends Doodle{
         
         // Helper function to check if a point is inside the canvas
         function isInCanvas(x, y, rad) {
-            return x >= 0 && x < width && y >= 0 && y < height
-                    && x+rad < width && y+rad < height
+            return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT
+                    && x+rad < WIDTH && y+rad < HEIGHT
                     && x-rad >= 0 && y-rad >= 0;
         }
         
@@ -632,11 +656,11 @@ class Weierstrass extends Doodle{
         }
         
         // Pick a random starting point
-        // const startX = Math.floor(Math.random() * width);
-        // const startY = Math.floor(Math.random() * height);
+        // const startX = Math.floor(Math.random() * WIDTH);
+        // const startY = Math.floor(Math.random() * HEIGHT);
 
-        const startX = width / 2;
-        const startY = height / 2;
+        const startX = WIDTH / 2;
+        const startY = HEIGHT / 2;
         
         // Add the starting point to the active points list
         activePoints.push({ x: startX, y: startY });
@@ -711,45 +735,149 @@ class Weierstrass extends Doodle{
             this.p.circle(x, y, size_sm);
         }
 
-
+        return this;
     }
  }
 
-function sketch(p) {
-    p.setup = function () {
-        p.createCanvas(width, 250);
-        
-        var method = helper.randomNumber(0, 5);
-        // method = 5;
-        console.log("method:", method)
+ class FlowField extends Doodle{
+    constructor(p5inst) {
+        super(p5inst);
+        this.current_z = 0;
+        this.difference = helper.randomNumber(20, 200);
+        this.num_particles = helper.randomNumber(1000, 15000);
+        this.speed_factor = helper.randomNumber(1, 4);
+        console.log(this.num_particles, this.difference, this.speed_factor)
 
-        switch(method){
-            case 0:
-                new SierpinskiTriangle(p, 240, 3500).generate_points().draw();
-                break;
-            case 1:
-                new WebVoronoi(p, 100).generate_points().draw();
-                break;
-            case 2:
-                new HoneycombVoronoi(p).generate_points().draw();
-                break;
-            case 3:
-                new Weierstrass(p).generate_points().draw();
-                break;
-            case 4:
-                new BiFurcation(p).generate_points().draw();
-                break;
-            case 5:
-                new BlueNoise(p).generate_points().draw();
-                break;
-            default:
-                new RandomVoronoi(p, 200).generate_points().draw();
-        }
-        
-        p.noLoop(); // no need to loop empty draw
+        this.is_playing = true;
     }
+
+    create_point(){
+        let val = this.p.map(this.p.random(1), 0, 1, -1, 1);
+        return this.p.createVector(this.p.random(WIDTH) + val*this.difference, this.p.random(HEIGHT) + val*this.difference)
+    }
+
+    generate_points(){
+        const points = [];
+
+        for(let i=0; i < this.num_particles; i++){
+            points.push(
+                this.create_point()
+            )
+        }
+
+        this.points = points;
+        return this;
+    }
+
+    draw(){
+        this.p.background(0);
+        const col_points = this.p.color('rgba(0, 187, 205, 0.8)');
+        this.p.stroke(col_points);
+        return this;
+    }
+
+    animate(){
+        this.p.background(0, 2);
+        // this.current_z = (this.p.millis() * 0.05) % 10000;
+        let scale = 0.0055;
+        const PI = 3.1415926535;
+
+        for (let i = 0; i < this.points.length; i++) {
+            let point = this.points[i];
+
+            this.p.point(point.x, point.y);
+
+            let n = this.p.noise(point.x * scale, point.y * scale, this.current_z * scale*10);
+            n = this.p.map(n, 0, 1, -1, 1);
+            let angle = 2*PI * n;
+
+            // let power_factor = parseInt(this.p.map(this.current_z, 0, 1, 1, 100) / 10);
+            // point.x += Math.pow(Math.cos(angle), power_factor);
+            // point.y += Math.pow(Math.sin(angle), power_factor);
+            point.x += Math.cos(angle) / this.speed_factor;
+            point.y += Math.sin(angle) / this.speed_factor;
+
+            if(! this.on_canvas(point, true)){
+                let new_point = this.create_point()
+                point.x = new_point.x;
+                point.y = new_point.y;
+            }
+
+        }
+
+        return this;
+    }
+
+    on_canvas(point, use_difference){
+        let difference = this.difference ? use_difference : 0;
+        return point.x + difference >= 0 
+                && point.x <= WIDTH + difference 
+                && point.y + difference >= 0 
+                && point.y <= HEIGHT + difference;
+    }
+
+    mousePressed(){
+        let is_clicked_on_canvas = this.on_canvas(
+            this.p.createVector(this.p.mouseX, this.p.mouseY),
+            false
+        );
+
+        if( ! is_clicked_on_canvas){
+            return false;
+        }
+
+        if(this.is_playing){
+            this.p.noLoop();
+        }else{
+            this.p.loop();
+        }
+
+        this.is_playing = ! this.is_playing;        
+    }
+ }
+
+
+function sketch(p) {
+    const box = document.getElementById('canvas-container');
+
+    if(box === null){
+        return null;
+    }
+
+    WIDTH = box.clientWidth;
+    HEIGHT = box.clientHeight;
+
+    let doodleInstance = null;
+
+    p.setup = function () {
+        p.createCanvas(WIDTH, 250);
+        
+        possibilities = {
+            0: SierpinskiTriangle, 
+            1: WebVoronoi,
+            2: HoneycombVoronoi, 
+            3: Weierstrass, 
+            4: BiFurcation,
+            5: BlueNoise, 
+            6: FlowField
+        };
+
+        let N = Object.keys(possibilities).length
+        var method = helper.randomNumber(0, N-2);
+        method = 6;
+        console.log("method:", method)
+        let doodle = possibilities[method];
+
+        doodleInstance = new doodle(p).generate_points().draw();
+    }
+
     p.draw = function () {
-        // empty
+        // console.log(doodleInstance)
+        doodleInstance.animate();
+    }
+
+    p.mousePressed = function(){
+        doodleInstance.mousePressed();
     }
 }
 

@@ -3,12 +3,12 @@
 }
 
 .post-preview{
-    /* border-bottom: 1px dashed #bbbbbb; */
-    border: none;
-
+    /* border: none; */
+    border-bottom: 1px dashed #bbbbbb;
     border-right: 1px dashed #bbbbbb;
-    /* border-radius: 0.8rem; */
+    /* border-radius: 0.1rem; */
     position: relative;
+    overflow: visible;
 }
 
 .post-preview::after{
@@ -17,8 +17,10 @@
     width: 10px;
     height: 10px;
     background-color: #404040;
-    bottom: 0px;
-    right: 0px;
+    bottom: -5px;
+    right: -5px;
+    border-radius: 50%;
+    z-index: 999999;
 }
 
 .pagination{
