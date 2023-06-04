@@ -1,3 +1,6 @@
+.navbar-custom.top-nav-regular .avatar-container{
+    width: 5.25rem;
+}
 .navbar-custom .avatar-container .avatar-img{
     border-radius: 25%;
 }

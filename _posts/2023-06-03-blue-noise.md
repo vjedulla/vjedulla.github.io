@@ -8,16 +8,15 @@ readtime: True
 last-updated: 2023-06-03
 ---
 
-Blue noise is an interesting concept used in so many ingenious applications. From the distribution of light capturing cones
-in your eye, to modern 3D printers, and many more. In practical terms blue noise referees to a random field of points (not only that),
-where there is not any "visible" clustering of points. The term is defined loosely what it means _to have points that have
-no visible clustering_, however, it is a nice property to have when you are doing sampling or generative art. 
+Blue noise is an interesting concept used in so many generative art and science. From the distribution of light capturing cones
+in your eye, to modern 3D printers, and many more. In practical terms blue noise referees to a random field of points,
+where there is not any "visible" clustering of points. This is a somewhat relaxed interpretation of the concept of "point cloud without visible clustering." Nevertheless, it remains an interesting and valuable property.
 
 ## Why so blue? 
 When I think about blue noise, I cannot stop but think of 
-[Chet Baker - Almost Blue](https://www.youtube.com/watch?v=z4PKzz81m5c&ab_channel=Sweetydu972M){:target="_blank"} song. It is
-captivating, bluesy, and it makes me feels distant. So that is why today we are going to explore this topic and dive deep into how
-we can generate this type of noise. I will not be showing any code, as there are a lot of more proper ways of generating it, and the
+[Chet Baker - Almost Blue](https://www.youtube.com/watch?v=z4PKzz81m5c&ab_channel=Sweetydu972M){:target="_blank"}. It is
+captivating, bluesy, and it makes me feels distant. That is why today I am going to explore this topic and dive into how
+we can generate this type of noise. I will not be showing any code as there are a lot of more proper ways of generating it, and the
 main goal of this post is to give you an understanding rather than creating "_trve_ blue noise." 
 
 ## Definitions
@@ -30,8 +29,8 @@ I think it is better to show the difference between _white_ vs _blue_ noise by a
     caption="Difference between white noise (left) and blue noise (right)" 
 %}
 
-Even though these scatter plots are generated randomly, the one on the right feels a bit more blue, and distant. We can see instantly 
-in the case of white noise, some clusters of points in several places. On the other hand, for the blue noise, we cannot spot clusters directly.
+Even though both of these 2D points are generated randomly, the one on the right feels a bit more distant, thus the term blue. In the case of white 
+noise we can see some clusters of points in several places. In contrast, the blue noise plot doesn't immediately see any clusters forming.
 
 ## Feels like blue
 Before explaining how we can generate them, we need to understand what are the inputs of a blue noise generator. First would be the 
@@ -47,7 +46,7 @@ constraint, _"no two points should be closer than the **spacing radius**."_
     figure.html 
     image="/assets/posts/blue_noise/blue_noise_energy_field_once.gif" 
     id=2
-    caption="Probability of next point animation" 
+    caption="Choosing where to place the next point based on a distance field" 
 %}
 
 The animation you are seeing is coming from the call `distance_transform_edt(1 - img)`, which basically gives a density of which coordinate
