@@ -864,7 +864,7 @@ function sketch(p) {
 
         let N = Object.keys(possibilities).length
         var method = helper.randomNumber(0, N-2);
-        method = 6;
+        // method = 6;
         console.log("method:", method)
         let doodle = possibilities[method];
 
