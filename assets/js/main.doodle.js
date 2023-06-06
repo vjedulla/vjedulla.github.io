@@ -1,5 +1,8 @@
+// GLOBAL VARAIBLES
 let WIDTH = null;
 let HEIGHT = null;
+let current_doodle_method = null;
+let possibilities = null;
 
 
 class helper{
@@ -58,6 +61,10 @@ class helper{
     }
 
     mousePressed(){
+        return false;
+    }
+
+    hasMousePressed(){
         return false;
     }
 }
@@ -834,8 +841,121 @@ class Weierstrass extends Doodle{
 
         this.is_playing = ! this.is_playing;        
     }
+
+    hasMousePressed(){
+        return true;
+    }
  }
 
+ class HilbertCurve extends Doodle{
+    constructor(p5inst) {
+        super(p5inst);
+        this.is_playing = true;
+        this.order = 5;
+        this.counter = 0;
+    }
+
+    calc_hilbert_point(index){
+        let order = this.order;
+
+        let points = [
+            new p5.Vector(0, 0),
+            new p5.Vector(0, 1),
+            new p5.Vector(1, 1),
+            new p5.Vector(1, 0)
+        ]
+
+        // Extract the least significant two bits of the index
+        let i = index & 3
+        let base = points[i]
+
+        for(let j = 1; j < order; j++){
+            // Right-shift the index by 2 bits to obtain the next two bits
+            index = index >> 2
+            i = index & 3
+            length = 2 ** j
+
+            if(i == 0){
+                // Perform a swap of x and y coordinates for quadrant 0
+                let temp = base.x
+                base.x = base.y
+                base.y = temp
+            }else if (i == 1){
+                // Update y coordinate for quadrant 1
+                base.y += length
+            }else if (i == 2){
+                // Update x and y coordinates for quadrant 2
+                base.x += length
+                base.y += length
+            }else if (i == 3){
+                // Perform a reflection and update x and y coordinates for quadrant 3
+                let temp = length - 1 - base.x
+                base.x = length - 1 - base.y
+                base.y = temp
+                base.x += length
+            }
+        }
+
+        return base
+    }
+
+    generate_points(){
+        let points = [];
+
+        const n = Math.pow(2, this.order)
+        const total = Math.pow(n, 2)
+        let len = HEIGHT / n;
+
+        for(let i=0; i < total; i++){
+            let p = this.calc_hilbert_point(i)
+            p.mult(len);
+            p.add(WIDTH / 3, len / 4);
+            points.push(p)
+        }
+
+        this.points = points;
+        return this;
+    }
+
+    draw(){
+        return this;
+    }
+
+    animate(){
+        this.p.stroke(0);
+        this.p.strokeWeight(2);
+        this.p.noFill();
+
+        let max_x = 0;
+        for (let i = 1; i < this.counter; i++) {
+            let h = this.p.map(i, 0, this.points.length, 0, 360);
+            this.p.stroke(50, 50, h/2);
+            this.p.line(this.points[i].x, this.points[i].y, this.points[i - 1].x, this.points[i - 1].y);
+
+            Math.max(Math.max(max_x, this.points[i].x), this.points[i - 1].x)
+        }
+        
+        if(! this.is_playing){
+            this.p.noLoop();
+        }
+
+        this.counter += this.p.map(this.p.noise(max_x), 0, 1, 5, this.points.length / 10);
+        if (this.counter > this.points.length) {
+            this.counter = this.points.length;
+            this.is_playing = false;
+        }
+
+        return this;
+    }
+ }
+
+
+ function on_canvas(point, use_difference){
+    return point.x >= 0 
+            && point.x <= WIDTH 
+            && point.y >= 0 
+            && point.y <= HEIGHT;
+}
 
 function sketch(p) {
     const box = document.getElementById('canvas-container');
@@ -846,38 +966,46 @@ function sketch(p) {
 
     WIDTH = box.clientWidth;
     HEIGHT = box.clientHeight;
+    current_doodle_method = -1;
+    possibilities = {
+        0: SierpinskiTriangle, 
+        1: WebVoronoi,
+        2: HoneycombVoronoi, 
+        3: Weierstrass, 
+        4: BiFurcation,
+        5: BlueNoise, 
+        6: FlowField,
+        7: HilbertCurve
+    };
+    
 
     let doodleInstance = null;
+
+    function sampleDoodle(possibilities){
+        let N = Object.keys(possibilities).length
+        var method = helper.randomNumber(0, N-2);
+        // method = 7;
+        console.log("method:", method)
+        return method;
+    }
 
     p.setup = function () {
         p.createCanvas(WIDTH, 250);
         
-        possibilities = {
-            0: SierpinskiTriangle, 
-            1: WebVoronoi,
-            2: HoneycombVoronoi, 
-            3: Weierstrass, 
-            4: BiFurcation,
-            5: BlueNoise, 
-            6: FlowField
-        };
-
-        let N = Object.keys(possibilities).length
-        var method = helper.randomNumber(0, N-2);
-        // method = 6;
-        console.log("method:", method)
-        let doodle = possibilities[method];
+        new_doodle_method = sampleDoodle(possibilities)
+        let doodle = possibilities[new_doodle_method];
 
         doodleInstance = new doodle(p).generate_points().draw();
     }
 
     p.draw = function () {
-        // console.log(doodleInstance)
         doodleInstance.animate();
     }
 
     p.mousePressed = function(){
-        doodleInstance.mousePressed();
+        if(doodleInstance.hasMousePressed()){
+            doodleInstance.mousePressed();
+        }
     }
 }
 
