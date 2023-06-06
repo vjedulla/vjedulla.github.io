@@ -29,3 +29,15 @@
 .pagination{
     margin: 3.625rem 0 0;
 }
+
+
+@media (max-width: 767px) {
+    /* Styles for mobile devices */
+    .navbar-custom.top-nav-regular .avatar-container {
+        width: 3.25rem;
+    }
+
+    .navbar-custom .avatar-container{
+        bottom: -2.5rem;
+    }
+  }

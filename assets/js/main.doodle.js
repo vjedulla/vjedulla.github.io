@@ -67,6 +67,10 @@ class helper{
     hasMousePressed(){
         return false;
     }
+
+    static getName(){
+        return "";
+    }
 }
 
 
@@ -143,6 +147,10 @@ class Weierstrass extends Doodle{
 
         return this;
     }
+
+    static getName(){
+        return "weierstrass"
+    }
 }
 
 /**
@@ -204,6 +212,9 @@ class Weierstrass extends Doodle{
         }
 
         return this;
+    }
+    static getName(){
+        return "random-voronoi"
     }
 }
 
@@ -272,6 +283,10 @@ class Weierstrass extends Doodle{
         }
 
         return this;
+    }
+
+    static getName(){
+        return "web-voronoi"
     }
 }
 
@@ -370,6 +385,10 @@ class Weierstrass extends Doodle{
         }
 
         return this;
+    }
+
+    static getName(){
+        return "honeycomb-voronoi"
     }
 }
 
@@ -489,6 +508,10 @@ class Weierstrass extends Doodle{
         }
 
         return this;
+    }
+
+    static getName(){
+        return "sierpinski-triangle"
     }
 }
 
@@ -626,6 +649,10 @@ class Weierstrass extends Doodle{
 
         return this;
     }
+
+    static getName(){
+        return "bifurcation"
+    }
  }
 
 
@@ -744,6 +771,10 @@ class Weierstrass extends Doodle{
 
         return this;
     }
+
+    static getName(){
+        return "blue-noise"
+    }
  }
 
  class FlowField extends Doodle{
@@ -845,6 +876,10 @@ class Weierstrass extends Doodle{
     hasMousePressed(){
         return true;
     }
+
+    static getName(){
+        return "flow-field"
+    }
  }
 
  class HilbertCurve extends Doodle{
@@ -902,6 +937,8 @@ class Weierstrass extends Doodle{
     generate_points(){
         let points = [];
 
+        let mobile_hack = WIDTH < 500;
+        
         const n = Math.pow(2, this.order)
         const total = Math.pow(n, 2)
         let len = HEIGHT / n;
@@ -909,7 +946,11 @@ class Weierstrass extends Doodle{
         for(let i=0; i < total; i++){
             let p = this.calc_hilbert_point(i)
             p.mult(len);
-            p.add(WIDTH / 3, len / 4);
+            if(mobile_hack){
+                p.add(WIDTH / 5, len / 4);
+            }else{
+                p.add(WIDTH / 3, len / 4);
+            }
             points.push(p)
         }
 
@@ -947,6 +988,9 @@ class Weierstrass extends Doodle{
 
         return this;
     }
+    static getName(){
+        return "hilbert-curve"
+    }
  }
 
 
@@ -957,8 +1001,22 @@ class Weierstrass extends Doodle{
             && point.y <= HEIGHT;
 }
 
+
+possibilities = {
+    0: SierpinskiTriangle, 
+    1: WebVoronoi,
+    2: HoneycombVoronoi, 
+    3: Weierstrass, 
+    4: BiFurcation,
+    5: BlueNoise, 
+    6: FlowField,
+    7: HilbertCurve
+};
+
 function sketch(p) {
-    const box = document.getElementById('canvas-container');
+    const box = document.getElementById(p._userNode);
+    
+    console.log(box);
 
     if(box === null){
         return null;
@@ -967,24 +1025,13 @@ function sketch(p) {
     WIDTH = box.clientWidth;
     HEIGHT = box.clientHeight;
     current_doodle_method = -1;
-    possibilities = {
-        0: SierpinskiTriangle, 
-        1: WebVoronoi,
-        2: HoneycombVoronoi, 
-        3: Weierstrass, 
-        4: BiFurcation,
-        5: BlueNoise, 
-        6: FlowField,
-        7: HilbertCurve
-    };
-    
 
     let doodleInstance = null;
 
     function sampleDoodle(possibilities){
         let N = Object.keys(possibilities).length
         var method = helper.randomNumber(0, N-2);
-        // method = 7;
+        method = 7;
         console.log("method:", method)
         return method;
     }
@@ -1009,4 +1056,17 @@ function sketch(p) {
     }
 }
 
-new p5(sketch, 'canvas-container');
+new p5(sketch, 'doodle-container');
+
+// const {
+// host, hostname, href, origin, pathname, port, protocol, search
+// } = window.location
+
+// let current_path = pathname.slice(1, -1)
+
+// if(current_path == 'doodles'){
+//     for(let i = 0; i < 7; i++){
+//         element_name = possibilities[i].getName();
+//         new p5(sketch, element_name);
+//     }
+// }
