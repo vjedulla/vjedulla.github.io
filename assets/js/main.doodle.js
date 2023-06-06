@@ -886,7 +886,7 @@ class Weierstrass extends Doodle{
     constructor(p5inst) {
         super(p5inst);
         this.is_playing = true;
-        this.order = 5;
+        this.order = 4;
         this.counter = 0;
     }
 
@@ -972,8 +972,6 @@ class Weierstrass extends Doodle{
             let h = this.p.map(i, 0, this.points.length, 0, 360);
             this.p.stroke(50, 50, h/2);
             this.p.line(this.points[i].x, this.points[i].y, this.points[i - 1].x, this.points[i - 1].y);
-
-            Math.max(Math.max(max_x, this.points[i].x), this.points[i - 1].x)
         }
         
         if(! this.is_playing){
@@ -994,13 +992,84 @@ class Weierstrass extends Doodle{
  }
 
 
- function on_canvas(point, use_difference){
+
+ class SmoothCurve extends Doodle{
+    constructor(p5inst) {
+        super(p5inst);
+
+        this.points = [];
+        this.x = 0;
+
+        this.to_add = 15;
+        
+        this.end = 3 * WIDTH / 4;
+    }
+
+
+    generate_points(){
+        return this;
+    }
+
+    animate(){
+        // this.p.background(255);
+        this.p.clear();
+        this.p.stroke(130);
+        this.p.strokeWeight(2);
+
+        let scale = 0.01;
+
+        let x_to_remove = 0;
+
+        if(this.x > this.end){
+            x_to_remove = this.points[this.to_add].x;
+            this.points = this.points.splice(this.to_add);
+        }
+
+        // console.log(this.points)
+
+        for (let i = 1; i < this.points.length; i++) {
+            // let h = this.p.map(i, 0, this.points.length, 0, 100)
+            // this.p.fill(130, 130, 130, h);    
+            this.p.line(this.points[i].x - x_to_remove, this.points[i].y, this.points[i - 1].x - x_to_remove, this.points[i - 1].y);
+        }
+
+        let n = this.points.length - 1;
+
+        if(n > 1){
+            this.p.fill(130);
+            this.p.circle(this.points[n].x - x_to_remove, this.points[n].y, 8)
+        }
+
+        for(let i=0; i < this.to_add; i++){
+            let x = this.x;
+            let rnd_number = this.p.noise(this.x * scale);
+            let y = this.p.map(rnd_number, 0, 1, HEIGHT/4, 3*HEIGHT/4);
+            this.points.push(this.p.createVector(x, y))
+
+            this.x += 0.08;
+        }
+
+        return this;
+    }
+
+    draw(){
+        return this;
+    }
+
+
+    static getName(){
+        return "smooth-curve"
+    }
+ }
+
+
+
+function on_canvas(point, use_difference){
     return point.x >= 0 
             && point.x <= WIDTH 
             && point.y >= 0 
             && point.y <= HEIGHT;
 }
-
 
 possibilities = {
     0: SierpinskiTriangle, 
@@ -1010,7 +1079,8 @@ possibilities = {
     4: BiFurcation,
     5: BlueNoise, 
     6: FlowField,
-    7: HilbertCurve
+    7: HilbertCurve,
+    8: SmoothCurve
 };
 
 function sketch(p) {
@@ -1031,7 +1101,7 @@ function sketch(p) {
     function sampleDoodle(possibilities){
         let N = Object.keys(possibilities).length
         var method = helper.randomNumber(0, N-2);
-        method = 7;
+        // method = 5;
         console.log("method:", method)
         return method;
     }
