@@ -1069,23 +1069,202 @@ class Weierstrass extends Doodle{
     constructor(p5inst) {
         super(p5inst);
 
-        this.points = [];
-        
+        this.playing = true;
+
+        this.cell_size = 5;
+        this.grid = this.createMatrix(HEIGHT, WIDTH, this.cell_size);
     }
 
+    createMatrix(row, col, cell_size){
+        let col_cell = parseInt(Math.round(col / cell_size));
+        let row_cell = parseInt(Math.round(row / cell_size));
+        // console.log(row_cell, col_cell)
+        let grid = new Array(col_cell);
+
+        for(let i=0; i < grid.length; i++){
+            grid[i] = new Array(row_cell);
+        }
+
+        return grid;
+    }
+
+    randomXY(num){
+        return [
+            parseInt(Math.round(this.p.noise(num)*this.grid.length)), 
+            parseInt(Math.round(this.p.noise(num*num)*this.grid[0].length))
+        ]
+    }
 
     generate_points(){
+        // for(let i=0; i < this.grid.length; i++){
+        //     for(let j=0; j < this.grid[0].length; j++){
+        //         let rnd = Math.floor(this.p.random(25))
+        //         if (rnd == 5){
+        //             rnd = 1;
+        //         }else{
+        //             rnd = 0;
+        //         }
+
+        //         this.grid[i][j] = rnd;
+        //     }
+        // }
+
+        for(let i=0; i < this.grid.length; i++){
+            for(let j=0; j < this.grid[0].length; j++){
+                this.grid[i][j] = 0;
+            }
+        }
+
+        for(let k=0; k < 150; k++){
+            let point = this.randomXY(k);
+            let x = point[0];
+            let y = point[1];
+            // console.log(x, y, this.grid.length, this.grid[0].length);
+
+            this.grid[x][y] = 1;
+        }
+
+        this.p.frameRate(10);
+
         return this;
     }
 
-    animate(){
-        return this;
+    countNeighbours(row, col){
+        let sum = 0;
+        for(let i = -1; i <= 1; i++){
+            for(let j = -1; j <= 1; j++){
+                // dont count oneselft
+                // if(i == 0 && j == 0) continue;
+
+                let pos_row = Math.min(Math.max(0, row + i), this.grid.length - 1);
+                let pos_col = Math.min(Math.max(0, col + j), this.grid[0].length - 1);
+                // console.log(row, col, i, j, pos_row, pos_col, sum, this.grid[pos_row][pos_col]);
+                sum += this.grid[pos_row][pos_col];
+            }
+        }
+
+        // console.log(sum);
+        return sum;
     }
 
     draw(){
         return this;
     }
 
+    nextGenerationGrid(){
+        let next = this.createMatrix(HEIGHT, WIDTH, this.cell_size);
+
+        for(let i=0; i < this.grid.length; i++){
+            for(let j=0; j < this.grid[0].length; j++){
+                let num = this.countNeighbours(i, j);
+
+                // Alternative
+                // if(this.grid[i][j] == 1  && num < 2){
+                //     // Rule 1:
+                //     // Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+                //     this.grid[i][j] = 1
+                // }else if(this.grid[i][j] == 1 && num >= 2 && num <= 3){
+                //     // Rule 2:
+                //     // Any live cell with two or three live neighbours lives on to the next generation.
+                //     this.grid[i][j] = 1
+                //     // do nothing.
+                // }else if(this.grid[i][j] == 1 && num > 3){
+                //     // Rule 3:
+                //     // Any live cell with more than three live neighbours dies, as if by overpopulation.
+                //     this.grid[i][j] = 0;
+                // }else if(this.grid[i][j] == 0 && num == 3){
+                //     // Rule 4:
+                //     // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+                //     this.grid[i][j] = 1;
+                // }
+
+                if(this.grid[i][j] == 1  && num < 2){
+                    // Rule 1:
+                    // Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+                    next[i][j] = 1
+                }else if(this.grid[i][j] == 1 && num >= 2 && num <= 3){
+                    // Rule 2:
+                    // Any live cell with two or three live neighbours lives on to the next generation.
+                    next[i][j] = 1
+                    // do nothing.
+                }else if(this.grid[i][j] == 1 && num > 3){
+                    // Rule 3:
+                    // Any live cell with more than three live neighbours dies, as if by overpopulation.
+                    next[i][j] = 0;
+                }else if(this.grid[i][j] == 0 && num == 3){
+                    // Rule 4:
+                    // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+                    next[i][j] = 1;
+                }else{
+                    next[i][j] = this.grid[i][j]
+                }
+
+            }
+        }
+
+        // return this.grid;
+        return next
+    }
+
+    animate(){
+        let BACKGROUND = 50;
+        let FOREGROUND = 190;
+
+        this.p.background(BACKGROUND);
+
+        for(let i=0; i < this.grid.length; i++){
+            for(let j=0; j < this.grid[0].length; j++){
+                let x = i * this.cell_size;
+                let y = j * this.cell_size;
+                
+                if(this.grid[i][j] === 1){
+                    this.p.fill(FOREGROUND);
+                }else{
+                    this.p.fill(BACKGROUND);
+                }
+
+                this.p.stroke(BACKGROUND);
+                this.p.rect(x, y, this.cell_size - 1, this.cell_size - 1);
+            }
+        }
+
+        // compute next grid
+        this.grid = this.nextGenerationGrid();
+
+        // this.p.noLoop();
+
+        if(this.p.random() < 0.07){
+            this.p.noLoop();
+            this.playing = false;
+        }
+
+
+        return this;
+    }
+
+    hasMousePressed(){
+        return true;
+    }
+
+    mousePressed(){
+        let is_clicked_on_canvas = on_canvas(
+            this.p.createVector(this.p.mouseX, this.p.mouseY)
+        );
+
+        console.log(is_clicked_on_canvas);
+
+        if( ! is_clicked_on_canvas){
+            return false;
+        }
+
+        if(this.playing){
+            this.p.noLoop();
+        }else{
+            this.p.loop();
+        }
+
+        this.playing = ! this.playing;
+    }
 
     static getName(){
         return "game-of-life"
@@ -1094,7 +1273,7 @@ class Weierstrass extends Doodle{
 
 
 
-function on_canvas(point, use_difference){
+function on_canvas(point){
     return point.x >= 0 
             && point.x <= WIDTH 
             && point.y >= 0 
@@ -1111,8 +1290,8 @@ possibilities = {
     6: FlowField,
     7: HilbertCurve,
     8: SmoothCurve,
-    10: GameOfLife,
-    9: RandomVoronoi
+    9: RandomVoronoi,
+    10: GameOfLife
 };
 
 function element_exists(element_id){
@@ -1122,7 +1301,7 @@ function element_exists(element_id){
 function createSketch(manual_choice_doodle) {
     return function sketch(p) {
         const box = document.getElementById(p._userNode)
-    
+        
         if(box === null){
             return null;
         }
@@ -1136,13 +1315,13 @@ function createSketch(manual_choice_doodle) {
         function sampleDoodle(possibilities){
             let N = Object.keys(possibilities).length
             var method = helper.randomNumber(0, N-2);
-            // method = 8;
+            // method = 10;
             console.log("method:", method)
             return method;
         }
     
         p.setup = function () {
-            p.createCanvas(WIDTH, 250);
+            p.createCanvas(WIDTH, HEIGHT);
             
             if(manual_choice_doodle !== null){
                 new_doodle_method = manual_choice_doodle;
@@ -1179,7 +1358,6 @@ if(current_path == 'doodles'){
     Object.entries(possibilities).forEach(([key, element]) => {
         let element_name = element.getName();
         if(element_exists(element_name)){
-            // console.log(key + ': ' + element_name);
             new p5(createSketch(key), element_name);
         }
     });
