@@ -7,6 +7,8 @@ permalink: /doodles/
 
 <div class="doodle box-doodle" id="flow-field"></div>
 
+<div class="doodle box-doodle" id="diff-lim-agg"></div>
+
 <div class="doodle box-doodle" id="game-of-life"></div>
 
 <div class="doodle box-doodle" id="smooth-curve"></div>

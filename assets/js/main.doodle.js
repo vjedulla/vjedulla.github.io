@@ -1272,12 +1272,183 @@ class Weierstrass extends Doodle{
  }
 
 
+ class Walker{
+    constructor(p5inst, radius, x, y, is_struck){
+        this.p = p5inst;
 
-function on_canvas(point){
-    return point.x >= 0 
-            && point.x <= WIDTH 
-            && point.y >= 0 
-            && point.y <= HEIGHT;
+        this.stuck = is_struck;
+        this.radius = radius;
+
+        if(x != undefined && y != undefined){
+            this.pos = this.p.createVector(x, y);
+        }else{
+            this.pos = this.randomStartLocation();
+        }        
+
+        this.vel = this.randomWalkVelocity();
+    }
+
+    walk(){
+        this.vel = this.randomWalkVelocity();
+
+        this.pos.add(this.vel);
+
+        this.pos.x = this.p.constrain(this.pos.x, this.radius, WIDTH - this.radius);
+        this.pos.y = this.p.constrain(this.pos.y, this.radius, HEIGHT - this.radius);
+    }
+
+    randomWalkVelocity(){
+        // let scale = 0.01;
+        // let scale = 0.01;
+        // const PI = 3.1415926535;
+
+        // let n = this.p.noise(this.pos.x * scale, this.pos.y * scale);
+        // n = this.p.map(n, 0, 1, -1, 1);
+
+        // let center = this.p.createVector(WIDTH/2, HEIGHT/2);
+        // let d = this.distanceSquared(this.pos, center);
+        // let cos = Math.sqrt(d) / this.pos.x;
+
+        // let angle = 2*PI * n;
+
+        // let x = Math.cos(angle);
+        // let y = Math.sin(angle);
+
+        // let velPerlin = this.p.createVector(x, y);
+
+        let vel = p5.Vector.random2D().mult(0.95);
+        return vel.mult(2);
+        // return velPerlin.mult(0.1); //.mult(this.p.random(-1, 1));
+    }
+
+    showVel(){
+        this.p.stroke(0);
+        this.p.line(this.pos.x, this.pos.y, (this.pos.x + this.vel.x) * 1.02, (this.pos.y + this.vel.y) * 1.02);
+    }
+
+    randomStartLocation(){
+        let start_locations = [
+            this.p.createVector(this.radius + 1, this.p.random(HEIGHT)),
+            this.p.createVector(WIDTH - (this.radius + 1), this.p.random(HEIGHT)),
+            this.p.createVector(this.p.random(WIDTH), this.radius + 1),
+            this.p.createVector(this.p.random(WIDTH), HEIGHT - (this.radius + 1)),
+        ]
+
+        let idx = Math.floor(this.p.random(4));
+        return start_locations[idx];
+    }
+
+    checkStuck(tree){
+        let r = this.radius;
+        for(let i = 0; i < tree.length; i++){
+            var d = this.distanceSquared(this.pos, tree[i].pos)
+            
+            if(d < (r * r)){
+                this.stuck = true;
+                return true;
+            }
+        }
+        return false
+    }
+
+    distanceSquared(a, b){
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+
+        return dx*dx + dy*dy;
+    }
+
+    show(){
+        this.p.noStroke();
+        this.p.noFill();
+        if(this.stuck){
+            this.p.fill(0, 90, 120);
+        }
+
+        this.p.ellipse(this.pos.x, this.pos.y, this.radius)
+    }
+
+
+ }
+
+ class DiffusionLimitetAgg extends Doodle{
+    constructor(p5inst) {
+        super(p5inst);
+        this.tree = [];
+        this.walkers = [];
+        this.MAX_WALKERS = 1000;
+        this.MAX_ITER = 100;
+        this.RADIUS = 4;
+    }
+
+    generate_points(){
+        this.tree[0] = new Walker(this.p, this.RADIUS, WIDTH / 2, HEIGHT / 2, true);
+
+        for(let i = 0; i < this.MAX_WALKERS; i++){
+            this.walkers[i] = new Walker(this.p, this.RADIUS);
+        }
+
+        return this;
+    }
+
+    draw(){
+        for(let i = 0; i < this.tree.length; i++){
+            this.tree[i].show();
+        }
+
+        for(let i = 0; i < this.walkers.length; i++){
+            this.walkers[i].show();
+        }
+
+        this.p.frameRate(16)
+
+        return this;
+    }
+
+
+    animate(){
+        this.p.clear();
+
+        if(this.walkers.length == 0){
+            console.log('finished')
+            this.p.noLoop();
+        }
+
+        for(let i = 0; i < this.tree.length; i++){
+            this.tree[i].show();
+        }
+        for(let i = 0; i < this.walkers.length; i++){
+            this.walkers[i].show();
+            // this.walkers[i].showVel();
+        }
+
+        for(let k=0; k < this.MAX_ITER; k++){
+            for(let i = 0; i < this.walkers.length; i++){
+                this.walkers[i].walk();
+                
+                if(this.walkers[i].checkStuck(this.tree)){
+                    this.tree.push(this.walkers[i]);
+                    this.walkers.splice(i, 1);
+                }
+            }
+        }
+
+        return this;
+    }
+
+    static getName(){
+        return "diff-lim-agg"
+    }
+ }
+
+
+function on_canvas(point, difference){
+    let diff = 0 ? difference == null : difference;
+
+    return point.x - diff >= 0 
+            && point.x + diff <= WIDTH 
+            && point.y - diff >= 0 
+            && point.y + diff <= HEIGHT;
 }
 
 possibilities = {
@@ -1291,7 +1462,8 @@ possibilities = {
     7: HilbertCurve,
     8: SmoothCurve,
     9: RandomVoronoi,
-    10: GameOfLife
+    10: GameOfLife,
+    11: DiffusionLimitetAgg
 };
 
 function element_exists(element_id){
@@ -1315,7 +1487,7 @@ function createSketch(manual_choice_doodle) {
         function sampleDoodle(possibilities){
             let N = Object.keys(possibilities).length
             var method = helper.randomNumber(0, N-2);
-            // method = 10;
+            // method = 11;
             console.log("method:", method)
             return method;
         }
