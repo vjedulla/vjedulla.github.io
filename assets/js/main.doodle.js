@@ -47,7 +47,7 @@ class helper{
         throw new Error("Method 'generate_points()' must be implemented.");
     }
 
-    draw(points, settings){
+    draw(){
         throw new Error("Method 'draw()' must be implemented.");
     }
 
@@ -187,7 +187,7 @@ class Weierstrass extends Doodle{
         return this;
     }
 
-    draw(points, settings){
+    draw(){
         const col_points = this.p.color(217, 63, 81);
         const col_lines = this.p.color(0, 109, 161);
 
@@ -202,7 +202,7 @@ class Weierstrass extends Doodle{
         }
 
         // 1/4 of the time draw the points as well
-        if(helper.randomNumber(0, 3) <= 3) return;
+        if(helper.randomNumber(0, 3) <= 3) return this;
 
         this.p.fill(col_points);
         this.p.noStroke();
@@ -213,6 +213,7 @@ class Weierstrass extends Doodle{
 
         return this;
     }
+
     static getName(){
         return "random-voronoi"
     }
@@ -784,7 +785,7 @@ class Weierstrass extends Doodle{
         this.difference = helper.randomNumber(20, 200);
         this.num_particles = helper.randomNumber(1000, 15000);
         this.speed_factor = helper.randomNumber(1, 4);
-        console.log(this.num_particles, this.difference, this.speed_factor)
+        // console.log(this.num_particles, this.difference, this.speed_factor)
 
         this.is_playing = true;
     }
@@ -1012,8 +1013,10 @@ class Weierstrass extends Doodle{
 
     animate(){
         // this.p.background(255);
+        let color = 100;
+
         this.p.clear();
-        this.p.stroke(130);
+        this.p.stroke(color);
         this.p.strokeWeight(2);
 
         let scale = 0.01;
@@ -1036,7 +1039,7 @@ class Weierstrass extends Doodle{
         let n = this.points.length - 1;
 
         if(n > 1){
-            this.p.fill(130);
+            this.p.fill(color);
             this.p.circle(this.points[n].x - x_to_remove, this.points[n].y, 8)
         }
 
@@ -1062,6 +1065,33 @@ class Weierstrass extends Doodle{
     }
  }
 
+ class GameOfLife extends Doodle{
+    constructor(p5inst) {
+        super(p5inst);
+
+        this.points = [];
+        
+    }
+
+
+    generate_points(){
+        return this;
+    }
+
+    animate(){
+        return this;
+    }
+
+    draw(){
+        return this;
+    }
+
+
+    static getName(){
+        return "game-of-life"
+    }
+ }
+
 
 
 function on_canvas(point, use_difference){
@@ -1080,63 +1110,78 @@ possibilities = {
     5: BlueNoise, 
     6: FlowField,
     7: HilbertCurve,
-    8: SmoothCurve
+    8: SmoothCurve,
+    10: GameOfLife,
+    9: RandomVoronoi
 };
 
-function sketch(p) {
-    const box = document.getElementById(p._userNode);
-    
-    console.log(box);
-
-    if(box === null){
-        return null;
-    }
-
-    WIDTH = box.clientWidth;
-    HEIGHT = box.clientHeight;
-    current_doodle_method = -1;
-
-    let doodleInstance = null;
-
-    function sampleDoodle(possibilities){
-        let N = Object.keys(possibilities).length
-        var method = helper.randomNumber(0, N-2);
-        // method = 5;
-        console.log("method:", method)
-        return method;
-    }
-
-    p.setup = function () {
-        p.createCanvas(WIDTH, 250);
-        
-        new_doodle_method = sampleDoodle(possibilities)
-        let doodle = possibilities[new_doodle_method];
-
-        doodleInstance = new doodle(p).generate_points().draw();
-    }
-
-    p.draw = function () {
-        doodleInstance.animate();
-    }
-
-    p.mousePressed = function(){
-        if(doodleInstance.hasMousePressed()){
-            doodleInstance.mousePressed();
-        }
-    }
+function element_exists(element_id){
+    return document.getElementById(element_id) !== null;
 }
 
-new p5(sketch, 'doodle-container');
+function createSketch(manual_choice_doodle) {
+    return function sketch(p) {
+        const box = document.getElementById(p._userNode)
+    
+        if(box === null){
+            return null;
+        }
+    
+        WIDTH = box.clientWidth;
+        HEIGHT = box.clientHeight;
+        current_doodle_method = -1;
+    
+        let doodleInstance = null;
+    
+        function sampleDoodle(possibilities){
+            let N = Object.keys(possibilities).length
+            var method = helper.randomNumber(0, N-2);
+            // method = 8;
+            console.log("method:", method)
+            return method;
+        }
+    
+        p.setup = function () {
+            p.createCanvas(WIDTH, 250);
+            
+            if(manual_choice_doodle !== null){
+                new_doodle_method = manual_choice_doodle;
+            }else{
+                new_doodle_method = sampleDoodle(possibilities)
+            }
+            
+            let doodle = possibilities[new_doodle_method];
+            doodleInstance = new doodle(p).generate_points().draw();
+        }
+    
+        p.draw = function () {
+            doodleInstance.animate();
+        }
+    
+        p.mousePressed = function(){
+            if(doodleInstance.hasMousePressed()){
+                doodleInstance.mousePressed();
+            }
+        }
+    };
+  }
 
-// const {
-// host, hostname, href, origin, pathname, port, protocol, search
-// } = window.location
+new p5(createSketch(null), 'doodle-container');
 
-// let current_path = pathname.slice(1, -1)
+const {
+host, hostname, href, origin, pathname, port, protocol, search
+} = window.location
 
-// if(current_path == 'doodles'){
-//     for(let i = 0; i < 7; i++){
-//         element_name = possibilities[i].getName();
-//         new p5(sketch, element_name);
-//     }
-// }
+let current_path = pathname.slice(1, -1)
+
+if(current_path == 'doodles'){
+
+    Object.entries(possibilities).forEach(([key, element]) => {
+        let element_name = element.getName();
+        if(element_exists(element_name)){
+            // console.log(key + ': ' + element_name);
+            new p5(createSketch(key), element_name);
+        }
+    });
+
+}

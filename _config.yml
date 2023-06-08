@@ -15,7 +15,7 @@ author: Armando Alliu
 
 navbar-links:
   Blog: "/"
-  # Doodles: "doodles"
+  Doodles: "doodles"
   # Resources:
   #   - Index: "tags"
   #   - RSS: "feed.xml"
