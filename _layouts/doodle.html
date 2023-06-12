@@ -1,0 +1,28 @@
+---
+layout: base
+common-ext-js:
+  - href: "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"
+    sri: "sha384-4DwFPfDzBSfnXZpj839Mo6bhRqNTtRjAkMbGrUMfQ0YjMWG8MWMXmwBXZoCNXzKS"
+common-js:
+  - "/assets/js/doodles/main.js"
+  - "/assets/js/doodles/utils.js"
+---
+
+{% include header.html type="post" %}
+
+<div class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}">
+  <div class="row">
+    <div class="{% if page.full-width %} col {% else %} col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 {% endif %}">
+
+      {% if page.js %}
+        <script href="{{ doodle.js }}"></script>
+      {% endif %}
+
+      <article role="main" class="doodle-post">
+        {{ content }}
+      </article>
+
+      
+    </div>
+  </div>
+</div>

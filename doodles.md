@@ -1,11 +1,11 @@
 ---
-layout: page
+layout: doodles
 title: art
 subtitle: experimenting with p5.js
 permalink: /doodles/
 ---
 
-<div class="doodle box-doodle" id="flow-field"></div>
+<!-- <div class="doodle box-doodle" id="flow-field"></div>
 
 <div class="doodle box-doodle" id="diff-lim-agg"></div>
 
@@ -23,16 +23,4 @@ permalink: /doodles/
 
 <div class="doodle box-doodle" id="hilbert-curve"></div>
 
-<div class="doodle box-doodle" id="bifurcation"></div>
-
-
-
-<!-- <div class="doodle box-doodle" id="web-voronoi"></div>
-
-
-<div class="doodle box-doodle" id="honeycomb-voronoi"></div>
-
-<div class="doodle box-doodle" id="random-voronoi"></div>
- -->
-
-
+<div class="doodle box-doodle" id="bifurcation"></div> -->

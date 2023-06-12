@@ -1,0 +1,52 @@
+---
+layout: page
+common-js:
+  - "/assets/js/doodles/main.js"
+  - "/assets/js/doodles/utils.js"
+---
+
+{{ content }}
+
+{% assign doodles = paginator.doodles | default: site.doodles %}
+
+<div class="posts-list">
+  {% for doodle in doodles %}
+
+  <article class="post-preview">
+
+    <a href="{{ doodle.url | absolute_url }}">
+      <h2 class="doodle-title">{{ doodle.title | strip_html }}</h2>
+
+      {% if doodle.subtitle %}
+        <h3 class="post-subtitle">
+          {{ doodle.subtitle | strip_html }}
+        </h3>
+      {% endif %}
+    </a>
+
+    <p class="post-meta">
+      {% assign date_format = site.date_format | default: "%b %-d %Y" %}
+      {{ doodle.date | date: date_format }}
+    </p>
+
+   </article>
+
+  {% endfor %}
+</div>
+
+{% if paginator.total_pages > 1 %}
+<ul class="pagination main-pager">
+  {% if paginator.previous_page %}
+  <li class="page-item previous">
+    <a class="page-link" href="{{ paginator.previous_page_path | absolute_url }}">&larr; Newer Posts</a>
+  </li>
+  {% endif %}
+  {% if paginator.next_page %}
+  <li class="page-item next">
+    <a class="page-link" href="{{ paginator.next_page_path | absolute_url }}">Older Posts &rarr;</a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
+

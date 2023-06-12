@@ -20,11 +20,12 @@ navbar-links:
   #   - Index: "tags"
   #   - RSS: "feed.xml"
   About Me: "me"
-  # hobbies: "exp"
-  # Resources:
-  #   - Beautiful Jekyll: "https://beautifuljekyll.com"
-  #   - Learn markdown: "https://www.markdowntutorial.com/"
-  # Author's home: "https://deanattali.com"
+
+
+collections:
+  doodles:
+    output: true
+    permalink: /doodles/:name
 
 # --- Logo --- #
 
@@ -137,7 +138,7 @@ site-css:
 # If you have common JavaScript files that should be included in every page, list them here
 site-js:
  - "/assets/js/rhill-voronoi-core.min.js"
- - "/assets/js/main.doodle.js"
+#  - "/assets/js/main.doodle.js"
  
 
 # --- Web Analytics Section --- #

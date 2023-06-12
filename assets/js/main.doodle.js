@@ -1233,7 +1233,7 @@ class Weierstrass extends Doodle{
 
         // this.p.noLoop();
 
-        if(this.p.random() < 0.07){
+        if(this.p.random() < 0.01){
             this.p.noLoop();
             this.playing = false;
         }
@@ -1317,7 +1317,7 @@ class Weierstrass extends Doodle{
         // let velPerlin = this.p.createVector(x, y);
 
         let vel = p5.Vector.random2D().mult(0.95);
-        return vel.mult(2);
+        return vel.mult(2.5);
         // return velPerlin.mult(0.1); //.mult(this.p.random(-1, 1));
     }
 
@@ -1442,13 +1442,11 @@ class Weierstrass extends Doodle{
  }
 
 
-function on_canvas(point, difference){
-    let diff = 0 ? difference == null : difference;
-
-    return point.x - diff >= 0 
-            && point.x + diff <= WIDTH 
-            && point.y - diff >= 0 
-            && point.y + diff <= HEIGHT;
+function on_canvas(point){
+    return point.x >= 0 
+            && point.x <= WIDTH 
+            && point.y >= 0 
+            && point.y <= HEIGHT;
 }
 
 possibilities = {
@@ -1462,8 +1460,8 @@ possibilities = {
     7: HilbertCurve,
     8: SmoothCurve,
     9: RandomVoronoi,
-    10: GameOfLife,
-    11: DiffusionLimitetAgg
+    // 10: GameOfLife,
+    10: DiffusionLimitetAgg
 };
 
 function element_exists(element_id){
@@ -1487,7 +1485,7 @@ function createSketch(manual_choice_doodle) {
         function sampleDoodle(possibilities){
             let N = Object.keys(possibilities).length
             var method = helper.randomNumber(0, N-2);
-            // method = 11;
+            // method = 10;
             console.log("method:", method)
             return method;
         }
@@ -1517,7 +1515,6 @@ function createSketch(manual_choice_doodle) {
     };
   }
 
-new p5(createSketch(null), 'doodle-container');
 
 const {
 host, hostname, href, origin, pathname, port, protocol, search
@@ -1525,13 +1522,17 @@ host, hostname, href, origin, pathname, port, protocol, search
 
 let current_path = pathname.slice(1, -1)
 
-if(current_path == 'doodles'){
-
-    Object.entries(possibilities).forEach(([key, element]) => {
-        let element_name = element.getName();
-        if(element_exists(element_name)){
-            new p5(createSketch(key), element_name);
-        }
-    });
-
+if(!current_path.includes('doodles')){
+    new p5(createSketch(null), 'doodle-container');
 }
+
+// if(current_path.includes('doodles')){
+
+//     Object.entries(possibilities).forEach(([key, element]) => {
+//         let element_name = element.getName();
+//         if(element_exists(element_name)){
+//             new p5(createSketch(key), element_name);
+//         }
+//     });
+
+// }
