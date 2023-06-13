@@ -100,9 +100,10 @@ class FlowField extends Doodle{
     }
  }
 
-let doodle = new FlowField();
+let doodle = null;
 
 function preprocesDoodle(){
+    doodle = new FlowField();
     doodle.pre_processing()
 }
 

@@ -1,8 +1,14 @@
 ---
-layout: base
+layout: base  
 common-ext-js:
   - href: "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"
     sri: "sha384-4DwFPfDzBSfnXZpj839Mo6bhRqNTtRjAkMbGrUMfQ0YjMWG8MWMXmwBXZoCNXzKS"
+  - href: "https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    sri: "sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+  - href: "https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    sri: "sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+  - href: "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    sri: "sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 common-js:
   - "/assets/js/doodles/main.js"
   - "/assets/js/doodles/utils.js"
@@ -14,14 +20,15 @@ common-js:
   <div class="row">
     <div class="{% if page.full-width %} col {% else %} col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 {% endif %}">
 
-      {% if page.js %}
-        <script href="{{ doodle.js }}"></script>
-      {% endif %}
+      
 
       <article role="main" class="doodle-post">
         {{ content }}
       </article>
 
+      {% if page.js %}
+        <script href="{{ doodle.js }}"></script>
+      {% endif %}
       
     </div>
   </div>

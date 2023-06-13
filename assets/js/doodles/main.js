@@ -14,7 +14,7 @@ class Doodle {
     // }
 
     preprocessing() {
-        throw new Error("Method 'generate_points()' must be implemented.");
+        throw new Error("Method 'preprocessing()' must be implemented.");
     }
 
     draw(){

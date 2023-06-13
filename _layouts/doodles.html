@@ -3,11 +3,12 @@ layout: page
 common-js:
   - "/assets/js/doodles/main.js"
   - "/assets/js/doodles/utils.js"
+  - "/assets/js/beautifuljekyll.js"
 ---
 
 {{ content }}
 
-{% assign doodles = paginator.doodles | default: site.doodles %}
+{% assign doodles = paginator.doodles | default: site.doodles | sort: 'date' | reverse %}
 
 <div class="posts-list">
   {% for doodle in doodles %}
