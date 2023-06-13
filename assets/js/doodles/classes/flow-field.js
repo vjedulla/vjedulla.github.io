@@ -108,7 +108,6 @@ function preprocesDoodle(){
 }
 
 function drawDoodle(){
-    background(0);
     doodle.draw();
 }
 
