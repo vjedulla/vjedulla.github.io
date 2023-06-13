@@ -1,3 +1,16 @@
+// ---
+// layout: doodle
+// title: Reactive petri dish
+// subtitle: growing life.
+// js: [
+//     "/assets/js/doodles/classes/diffusion.js", 
+//     "/assets/js/doodles/classes/reactive-diffusion.js"
+// ]
+// date: 13-06-2023
+// ---
+
+// <div id="specific-doodle-container"></div>
+
 class Walker{
     constructor(radius, x, y, is_struck){
         this.stuck = is_struck;
@@ -176,31 +189,181 @@ class DiffusionLimitetAgg extends Doodle{
  }
 
 
+
+class ReactiveDifussion extends Doodle{
+    constructor(baseDoodle){
+        super();
+
+        this.grid = null;
+        this.next = null;
+
+        // from previus
+        // only populated when the previus one finishes;
+        this.seed = null;
+        this.prev_doodle = baseDoodle;
+
+
+        // parameters
+        this.dA = 1.0;
+        this.dB = 0.5;
+        this.feed = 0.055;
+        this.k = 0.062;
+
+    }
+
+    pre_processing(){
+        this.grid = [];
+        this.next = []
+
+        // pixelDensity(1);
+
+        for(let i = 0; i < width; i++){
+            this.grid[i] = [];
+            this.next[i] = [];
+            for(let j = 0; j < height; j++){
+                this.grid[i][j] = {a: 1, b: 0};
+                this.next[i][j] = {a: 1, b: 0};
+            }
+        }
+
+
+        
+
+        return this;
+    }
+
+    draw(){
+        // console.log(this.seed.length)
+        // only once
+        if(this.seed !== 1001){
+            return this;
+        }
+
+       
+        for(let i = 0; i < this.seed.length; i++){
+            let x = floor(this.seed[i].pos.x);
+            let y = floor(this.seed[i].pos.y);
+
+            console.log(x, y)
+
+            this.grid[x][y].b = 1;
+        }
+
+        return this;
+    }
+
+    swap(){
+        let temp = this.grid;
+        this.grid = this.next;
+        this.next = temp;
+    }
+
+    laplace(property, i, j){
+        let sum = 0;
+
+        // console.log(this.grid[i][j])
+
+        sum += this.grid[i][j][property] * -1;
+        sum += this.grid[i-1][j][property] * 0.2;
+        sum += this.grid[i+1][j][property] * 0.2;
+        sum += this.grid[i][j-1][property] * 0.2;
+        sum += this.grid[i][j+1][property] * 0.2;
+        sum += this.grid[i-1][j-1][property] * 0.05;
+        sum += this.grid[i+1][j-1][property] * 0.05;
+        sum += this.grid[i-1][j+1][property] * 0.05;
+        sum += this.grid[i+1][j+1][property] * 0.05;
+
+        return sum;
+    }
+
+    animate(){
+        if(this.prev_doodle.isFinished() && this.seed === null){
+            this.seed = this.prev_doodle.tree;
+
+            console.log("finished and set to", this.prev_doodle.tree)
+            return this;
+        }
+
+        if(this.seed === null){ 
+            return this;
+        }
+
+        // background(50);
+
+        for(let i = 1; i < width-1; i++){
+            for(let j = 1; j < height-1; j++){
+                let a = this.grid[i][j].a;
+                let b = this.grid[i][j].b;
+
+                this.next[i][j].a = a + 
+                                    (this.dA * this.laplace('a', i, j)) - 
+                                    (a * b * b) + 
+                                    (this.feed * (1 - a));
+
+                this.next[i][j].b = b + 
+                                    (this.dB * this.laplace('b', i, j)) - 
+                                    (a * b * b) + 
+                                    ((this.k + this.feed) * b);
+
+                this.next[i][j].a = constrain(this.next[i][j].a, 0, 1);
+                this.next[i][j].b = constrain(this.next[i][j].b, 0, 1);
+            }
+        }
+
+        loadPixels();
+            for(let i = 0; i < width; i++){
+                for(let j = 0; j < height; j++){
+                    let idx = (i + j * width) * 4;
+                    pixels[idx + 0] = floor(this.grid[i][j].a) * 255;
+                    pixels[idx + 1] = 0;
+                    pixels[idx + 2] = floor(this.grid[i][j].b) * 255;
+                    pixels[idx + 3] = 255;
+                }
+            }
+
+        updatePixels();
+
+        this.swap();
+
+        return this;
+    }
+}
+
 let doodle = null;
+let baseDoodle = null;
 
 function preprocesDoodle(){
-    doodle = new DiffusionLimitetAgg();
-    doodle.pre_processing()
+    // diffussion doodle
+    baseDoodle = new DiffusionLimitetAgg();
+    baseDoodle.pre_processing()
+
+    doodle = new ReactiveDifussion(baseDoodle);
+    doodle.pre_processing();
 }
 
 function drawDoodle(){
-    doodle.draw();
+    baseDoodle.draw();
 }
 
 function animateDoodle(){
-    doodle.animate(false);
+    baseDoodle.animate(true);
+
+    if(baseDoodle.isFinished()){
+        doodle.animate();
+        doodle.draw();
+    }
 }
 
 
 function mousePressedDoodle(){
-    if(doodle.hasMousePressed()){
-        doodle.mousePressed();
+    if(baseDoodle.hasMousePressed()){
+        baseDoodle.mousePressed();
     }
 }
 
 
 function mouseMovedDoodle(){
-    if(doodle.hasMouseMoved()){
-        doodle.mouseMoved();
+    if(baseDoodle.hasMouseMoved()){
+        baseDoodle.mouseMoved();
     }
 }

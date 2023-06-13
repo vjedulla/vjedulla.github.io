@@ -26,8 +26,23 @@ common-js:
         {{ content }}
       </article>
 
-      {% if page.js %}
-        <script href="{{ doodle.js }}"></script>
+      {% if page.js.size > 0 %}
+        {% if page.js[0] == nil %}
+          {% assign is_array = false %}
+        {% else %}
+          {% assign is_array = true %}
+        {% endif %}
+      {% else %}
+        {% assign is_array = false %}
+      {% endif %}
+
+
+      {% if is_array %}
+        {% for s in page.js%}
+          <script href="{{ s }}"></script>
+        {% endfor %}
+      {% else %}
+        <script href="{{ page.js }}"></script>
       {% endif %}
       
     </div>
