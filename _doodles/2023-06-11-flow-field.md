@@ -7,7 +7,3 @@ date: 11-06-2023
 ---
 
 <div id="specific-doodle-container"></div>
-
-<!-- <script>
-    console.log('here')
-</script> -->
