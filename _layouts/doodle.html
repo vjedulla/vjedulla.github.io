@@ -45,6 +45,14 @@ common-js:
         <script href="{{ page.js }}"></script>
       {% endif %}
       
+
+      {% if page.ommit_main %}
+        <!-- Variable exists, do something -->
+      {% else %}
+        <!-- Variable does not exist -->
+        <script href="/assets/js/doodles/main.js"></script>
+      {% endif %}
+
     </div>
   </div>
 </div>

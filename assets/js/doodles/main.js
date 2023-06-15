@@ -89,6 +89,7 @@ function setup() {
     let canvas = createCanvas(width, height);
     canvas.parent(container_name);
 
+    
     if (typeof preprocesDoodle === 'function') {
         // The function exists in the current scope
         // Your code here

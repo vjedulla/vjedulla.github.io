@@ -207,7 +207,7 @@ class ReactiveDifussion extends Doodle{
         this.dA = 1.0;
         this.dB = 0.5;
         this.feed = 0.055;
-        this.k = 0.062;
+        this.k = 0.061;
 
     }
 
@@ -215,7 +215,7 @@ class ReactiveDifussion extends Doodle{
         this.grid = [];
         this.next = []
 
-        // pixelDensity(1);
+        pixelDensity(1);
 
         for(let i = 0; i < width; i++){
             this.grid[i] = [];
@@ -226,27 +226,30 @@ class ReactiveDifussion extends Doodle{
             }
         }
 
-
-        
-
         return this;
     }
 
     draw(){
         // console.log(this.seed.length)
         // only once
-        if(this.seed !== 1001){
-            return this;
-        }
+        // if(this.seed !== 1001){
+        //     return this;
+        // }
 
        
-        for(let i = 0; i < this.seed.length; i++){
-            let x = floor(this.seed[i].pos.x);
-            let y = floor(this.seed[i].pos.y);
+        // for(let i = 0; i < this.seed.length; i++){
+        //     let x = floor(this.seed[i].pos.x);
+        //     let y = floor(this.seed[i].pos.y);
 
-            console.log(x, y)
+        //     console.log(x, y)
 
-            this.grid[x][y].b = 1;
+        //     this.grid[x][y].b = 1;
+        // }
+
+        for(let i = 50; i < 150; i++){
+            for(let j = 50; j < 150; j++){
+                this.grid[i][j].b = 1;
+            }
         }
 
         return this;
@@ -261,8 +264,6 @@ class ReactiveDifussion extends Doodle{
     laplace(property, i, j){
         let sum = 0;
 
-        // console.log(this.grid[i][j])
-
         sum += this.grid[i][j][property] * -1;
         sum += this.grid[i-1][j][property] * 0.2;
         sum += this.grid[i+1][j][property] * 0.2;
@@ -276,19 +277,21 @@ class ReactiveDifussion extends Doodle{
         return sum;
     }
 
+
     animate(){
-        if(this.prev_doodle.isFinished() && this.seed === null){
-            this.seed = this.prev_doodle.tree;
+        background(245);
+        // if(this.prev_doodle.isFinished() && this.seed === null){
+        //     this.seed = this.prev_doodle.tree;
 
-            console.log("finished and set to", this.prev_doodle.tree)
-            return this;
-        }
+        //     console.log("finished and set to", this.prev_doodle.tree)
+        //     return this;
+        // }
 
-        if(this.seed === null){ 
-            return this;
-        }
+        // if(this.seed === null){ 
+        //     return this;
+        // }
 
-        // background(50);
+        
 
         for(let i = 1; i < width-1; i++){
             for(let j = 1; j < height-1; j++){
@@ -301,8 +304,8 @@ class ReactiveDifussion extends Doodle{
                                     (this.feed * (1 - a));
 
                 this.next[i][j].b = b + 
-                                    (this.dB * this.laplace('b', i, j)) - 
-                                    (a * b * b) + 
+                                    (this.dB * this.laplace('b', i, j)) +
+                                    (a * b * b) -
                                     ((this.k + this.feed) * b);
 
                 this.next[i][j].a = constrain(this.next[i][j].a, 0, 1);
@@ -314,13 +317,17 @@ class ReactiveDifussion extends Doodle{
             for(let i = 0; i < width; i++){
                 for(let j = 0; j < height; j++){
                     let idx = (i + j * width) * 4;
-                    pixels[idx + 0] = floor(this.grid[i][j].a) * 255;
-                    pixels[idx + 1] = 0;
-                    pixels[idx + 2] = floor(this.grid[i][j].b) * 255;
+                    let a = this.next[i][j].a;
+                    let b = this.next[i][j].b;
+                    let c = floor((a-b) * 245);
+                    c = constrain(c, 0, 245);
+
+                    pixels[idx + 0] = c;
+                    pixels[idx + 1] = c;
+                    pixels[idx + 2] = c;
                     pixels[idx + 3] = 255;
                 }
             }
-
         updatePixels();
 
         this.swap();
@@ -334,36 +341,38 @@ let baseDoodle = null;
 
 function preprocesDoodle(){
     // diffussion doodle
-    baseDoodle = new DiffusionLimitetAgg();
-    baseDoodle.pre_processing()
+    // baseDoodle = new DiffusionLimitetAgg();
+    // baseDoodle.pre_processing()
 
     doodle = new ReactiveDifussion(baseDoodle);
     doodle.pre_processing();
 }
 
 function drawDoodle(){
-    baseDoodle.draw();
+    // baseDoodle.draw();
+    doodle.draw();
 }
 
 function animateDoodle(){
-    baseDoodle.animate(true);
+    doodle.animate();
+    // baseDoodle.animate(true);
 
-    if(baseDoodle.isFinished()){
-        doodle.animate();
-        doodle.draw();
-    }
+    // if(baseDoodle.isFinished()){
+    //     doodle.animate();
+    //     doodle.draw();
+    // }
 }
 
 
-function mousePressedDoodle(){
-    if(baseDoodle.hasMousePressed()){
-        baseDoodle.mousePressed();
-    }
-}
+// function mousePressedDoodle(){
+//     if(baseDoodle.hasMousePressed()){
+//         baseDoodle.mousePressed();
+//     }
+// }
 
 
-function mouseMovedDoodle(){
-    if(baseDoodle.hasMouseMoved()){
-        baseDoodle.mouseMoved();
-    }
-}
+// function mouseMovedDoodle(){
+//     if(baseDoodle.hasMouseMoved()){
+//         baseDoodle.mouseMoved();
+//     }
+// }
