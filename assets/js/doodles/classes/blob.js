@@ -11,12 +11,14 @@ class Blob extends Doodle{
     }
 
     pre_processing(){       
-        
 
         return this;
     }
 
     draw(){
+        // blendMode(SOFT_LIGHT);
+        blendMode(DODGE);
+        // blendMode(SUBTRACT);
         // const col_points = color('rgba(0, 187, 205, 0.8)');
         // stroke(col_points);
         // frameRate(5);
