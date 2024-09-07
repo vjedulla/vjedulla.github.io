@@ -8,7 +8,7 @@ show_buy_me: false
 
 
 Hey there, I'm Armando, but you can call me Mando. Welcome to my corner of the internet!
-Currently, I'm part of the talented team at [Jetpack.AI](https://jetpack.ai/){:target="_blank"}. Beyond the realm of data, I find inspiration in various hobbies such as films, and photography.
+Currently, I'm part of the Connected Technologies (CT) team at *Toyota Motor Europe (TME)*. Beyond the realm of data, I find inspiration in various hobbies such as films, and photography.
 
 
 ### My Journey
@@ -17,7 +17,7 @@ This blog is dedicated to sharing my journey as a Data Scientist. My goal is to 
 
 ### Background and Experience
 
-I hold a master's degree in __Computer Science: Data Science__ and also have the __AWS Solution Architect Associate__ certification under my belt. In my previous roles, I've had the opportunity to work with clients like *Unilever*, *RESA*, and *Brussels Airport*, where I focused on both Data Science and Engineering projects. My <a href="/assets/pdf/mando.pdf" target="_blank">current resume</a>.
+I hold a master's degree in __Computer Science: Data Science__ and also have the __AWS Solution Architect Associate__ certification under my belt. As a consultant, I've had the opportunity to work with clients like *Unilever*, *RESA*, and *Brussels Airport*. I later joined *Nike* as a __Senior Data Scientist__ where I mostly worked on forecasting short-term demand. In 2024, I made the decision to join *Toyota* as a __Technical Project Lead__. My role is primarily concerned making architectural decisions, and technical translation of business requirements. My <a href="/assets/pdf/mando.pdf" target="_blank">current resume</a>.
 
 ### Let's Connect
 

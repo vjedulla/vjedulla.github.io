@@ -1,4 +1,5 @@
 ## To run locally:
+`bundle install` (once)
 
 `bundle exec jekyll serve`
 
